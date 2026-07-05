@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## CareerOS
 
-## Getting Started
+A personal career dashboard for a single user.
 
-First, run the development server:
+### Tech stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Next.js 15](https://nextjs.org) (App Router)
+- TypeScript
+- Tailwind CSS
+- [shadcn/ui](https://ui.shadcn.com)
+- [Supabase](https://supabase.com)
+
+### Project structure
+
+```
+src/
+├── app/                  # Routes (App Router)
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── components/
+│   └── ui/               # shadcn/ui components
+└── lib/
+    ├── utils.ts          # shadcn `cn()` helper
+    └── supabase/
+        ├── client.ts     # Supabase client (Client Components)
+        └── server.ts     # Supabase client (Server Components/Actions)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Pages and features are added incrementally as the app is built out.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Getting started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Install dependencies:
 
-## Learn More
+   ```bash
+   npm install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Copy the environment variable template and fill in your Supabase project credentials:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   cp .env.local.example .env.local
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Run the dev server:
 
-## Deploy on Vercel
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Open [http://localhost:3000](http://localhost:3000).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Adding shadcn/ui components
+
+```bash
+npx shadcn@latest add <component>
+```

@@ -1,0 +1,20 @@
+import { Plus } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+
+export function InstagramHeader() {
+  return (
+    <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-[24px]">Instagram</h1>
+        <p className="mt-1 text-[13.5px] text-muted-foreground">
+          Track followers, content, and engagement.
+        </p>
+      </div>
+      <Button className="rounded-2xl px-4 py-2 shadow-sm">
+        <Plus className="size-3.5" />
+        Log Post
+      </Button>
+    </div>
+  );
+}
