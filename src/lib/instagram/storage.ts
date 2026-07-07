@@ -9,7 +9,6 @@ import type {
 } from "@/components/instagram/types";
 import { Camera, FileText, Target, TrendingUp } from "lucide-react";
 
-import { instagramPostSeeds } from "@/lib/mock/instagram";
 import {
   BASELINE_FOLLOWERS,
   contentBreakdownBuckets,
@@ -23,7 +22,6 @@ import {
   legacySeedLikes,
   legacySeedReach,
   legacySeedTitles,
-  seedDistribution,
 } from "@/lib/instagram/constants";
 import { instagramBreakdownIcons } from "@/lib/instagram/icons";
 import { createItem, deleteItem, updateItem } from "@/lib/storage/crud";
@@ -212,48 +210,9 @@ function migrateInstagramState(raw: unknown): InstagramPersistedState {
 }
 
 function createSeedState(): InstagramPersistedState {
-  const totalFollowersGained = 207;
-  const totalGeneratedPosts = seedDistribution.reduce((total, bucket) => total + bucket.count, 0);
-  let assignedFollowers = 0;
-  let postIndex = 0;
-
-  const posts = seedDistribution.flatMap((bucket) =>
-    Array.from({ length: bucket.count }, (_, index) => {
-      postIndex += 1;
-      const featured = instagramPostSeeds.find((seed) => seed.contentType === bucket.contentType);
-      const useFeatured = index === 0 && featured;
-      const followersGained =
-        postIndex === totalGeneratedPosts
-          ? totalFollowersGained - assignedFollowers
-          : Math.floor(totalFollowersGained / totalGeneratedPosts);
-
-      assignedFollowers += followersGained;
-
-      return {
-        id: crypto.randomUUID(),
-        postTitle: useFeatured ? featured.title : `${bucket.contentType} post ${index + 1}`,
-        contentType: bucket.contentType,
-        status: "Published" as InstagramPostStatus,
-        publishDate: useFeatured && featured ? legacySeedDates[featured.id] ?? "" : "",
-        postUrl: "",
-        caption: "",
-        topic: "",
-        contentPillar: "",
-        reach: bucket.reach,
-        likes: useFeatured && featured ? legacySeedLikes[featured.id] ?? 0 : 0,
-        comments: 0,
-        shares: 0,
-        saves: 0,
-        followersGained,
-        hashtags: "",
-        notes: "",
-        favourite: false,
-        archived: false,
-      };
-    })
-  );
-
-  return { posts };
+  return {
+    posts: [],
+  };
 }
 
 function normalizeInstagramPost(

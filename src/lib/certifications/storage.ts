@@ -2,7 +2,6 @@ import type { StatCardData } from "@/components/dashboard/types";
 import type { Certification, CertificationStatus } from "@/components/certifications/types";
 import { Award, BookOpen, Calendar, GraduationCap } from "lucide-react";
 
-import { certifications as seedCertifications } from "@/lib/mock/certifications";
 import {
   CERTIFICATIONS_STORAGE_KEY,
   legacySeedColors,
@@ -115,19 +114,7 @@ function migrateCertificationsState(raw: unknown): CertificationsPersistedState 
 
 function createSeedState(): CertificationsPersistedState {
   return {
-    certifications: seedCertifications.map((cert) => ({
-      id: crypto.randomUUID(),
-      name: cert.name,
-      provider: cert.issuer,
-      status: cert.status,
-      percent: cert.percent ?? (cert.status === "Completed" ? 100 : 0),
-      examDate: cert.dateLabel,
-      credentialUrl: "",
-      notes: "",
-      favourite: false,
-      archived: false,
-      colorKey: cert.id,
-    })),
+    certifications: [],
   };
 }
 

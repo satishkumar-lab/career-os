@@ -29,7 +29,7 @@ import type {
  * live data later is a drop-in replacement for these constants.
  */
 
-export const streak = { days: 14, note: "Personal best" };
+export const streak = { days: 0, note: "Start a streak" };
 
 export const stats: StatCardData[] = [
   {

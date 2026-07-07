@@ -2,7 +2,6 @@ import type { StatCardData } from "@/components/dashboard/types";
 import type { Course, WeeklyHoursPoint } from "@/components/learning/types";
 import { BookOpen, Clock, Flame, GraduationCap } from "lucide-react";
 
-import { courses as seedCourses, weeklyHours as seedWeeklyHours, weeklyHoursTotal as seedWeeklyHoursTotal } from "@/lib/mock/learning";
 import { createItem, deleteItem, generateId, updateItem } from "@/lib/storage/crud";
 import { initStorage, readStorage, writeStorage } from "@/lib/storage/local-storage";
 import {
@@ -31,15 +30,25 @@ export interface CourseInput {
   icon: Course["icon"];
 }
 
+const emptyWeeklyHours: WeeklyHoursPoint[] = [
+  { label: "Mon", hours: 0 },
+  { label: "Tue", hours: 0 },
+  { label: "Wed", hours: 0 },
+  { label: "Thu", hours: 0 },
+  { label: "Fri", hours: 0 },
+  { label: "Sat", hours: 0 },
+  { label: "Sun", hours: 0 },
+];
+
 function createSeedState(): LearningPersistedState {
   return {
-    courses: seedCourses,
-    weeklyHours: seedWeeklyHours,
-    weeklyHoursTotal: seedWeeklyHoursTotal,
-    hoursThisWeek: "8.5h",
-    hoursTrend: "+2.1h vs last week",
-    dailyStreak: "14d",
-    dailyStreakTrend: "Personal best 🔥",
+    courses: [],
+    weeklyHours: emptyWeeklyHours,
+    weeklyHoursTotal: "0h this week",
+    hoursThisWeek: "0h",
+    hoursTrend: "Log learning time",
+    dailyStreak: "0d",
+    dailyStreakTrend: "Start a streak",
     notes: "",
   };
 }

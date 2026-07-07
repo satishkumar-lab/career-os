@@ -8,7 +8,6 @@ import type {
 } from "@/components/goals/types";
 import { BarChart3, CheckCircle2, Flag, TrendingDown } from "lucide-react";
 
-import { goalSeeds } from "@/lib/mock/goals";
 import {
   categoryColors,
   getCategoryDisplayLabel,
@@ -172,19 +171,7 @@ function migrateGoalsState(raw: unknown): GoalsPersistedState {
 
 function createSeedState(): GoalsPersistedState {
   return {
-    goals: goalSeeds.map((goal) => ({
-      id: crypto.randomUUID(),
-      goalTitle: legacySeedTitles[goal.id] ?? goal.title,
-      category: legacySeedCategories[goal.id] ?? "Personal",
-      priority: legacySeedPriorities[goal.id] ?? "Medium",
-      status: "In Progress" as GoalWorkflowStatus,
-      targetDate: legacySeedTargetDates[goal.id] ?? "",
-      progress: legacySeedProgress[goal.id] ?? 0,
-      notes: "",
-      favourite: false,
-      archived: false,
-      colorKey: goal.id,
-    })),
+    goals: [],
   };
 }
 

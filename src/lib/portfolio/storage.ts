@@ -8,7 +8,6 @@ import type {
 import { defaultPortfolioStages as emptyStages } from "@/components/portfolio/types";
 import { Code2, FileText, Globe, Zap } from "lucide-react";
 
-import { portfolioProjects as seedProjects } from "@/lib/mock/portfolio";
 import {
   defaultSeedCategories,
   defaultSeedTags,
@@ -193,24 +192,7 @@ function migratePortfolioState(raw: unknown): PortfolioPersistedState {
 
 function createSeedState(): PortfolioPersistedState {
   return {
-    projects: seedProjects.map((project) => ({
-      id: crypto.randomUUID(),
-      title: project.name,
-      description: "",
-      category: defaultSeedCategories[project.id] ?? "Other",
-      status: project.stages.published ? "Published" : "Draft",
-      completionDate: "",
-      behanceUrl: "",
-      dribbbleUrl: "",
-      liveWebsiteUrl: "",
-      figmaUrl: "",
-      thumbnail: { type: "none" },
-      tags: defaultSeedTags[project.id] ?? [],
-      favourite: false,
-      archived: false,
-      notes: "",
-      stages: { ...project.stages },
-    })),
+    projects: [],
   };
 }
 

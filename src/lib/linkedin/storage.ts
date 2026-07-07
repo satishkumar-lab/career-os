@@ -8,7 +8,6 @@ import type {
 } from "@/components/linkedin/types";
 import { FileText, Globe, Target, TrendingUp } from "lucide-react";
 
-import { linkedInPostSeeds } from "@/lib/mock/linkedin";
 import {
   BASELINE_FOLLOWERS,
   FOLLOWER_TARGET,
@@ -195,24 +194,7 @@ function migrateLinkedInState(raw: unknown): LinkedInPersistedState {
 
 function createSeedState(): LinkedInPersistedState {
   return {
-    posts: linkedInPostSeeds.map((post) => ({
-      id: crypto.randomUUID(),
-      postTitle: post.title,
-      postType: "Text" as LinkedInPostType,
-      status: "Published" as LinkedInPostStatus,
-      publishDate: legacySeedDates[post.id] ?? "",
-      postUrl: "",
-      topic: "",
-      contentPillar: "",
-      impressions: legacySeedImpressions[post.id] ?? 0,
-      likes: legacySeedLikes[post.id] ?? 0,
-      comments: 0,
-      reposts: 0,
-      followersGained: legacySeedFollowersGained[post.id] ?? 0,
-      notes: "",
-      favourite: false,
-      archived: false,
-    })),
+    posts: [],
   };
 }
 

@@ -3,7 +3,7 @@ import type { LinkedInPostStatus, LinkedInPostType } from "@/components/linkedin
 export const LINKEDIN_STORAGE_KEY = "career-os-linkedin";
 
 export const FOLLOWER_TARGET = 5000;
-export const BASELINE_FOLLOWERS = 312;
+export const BASELINE_FOLLOWERS = 0;
 export const GROWTH_WEEKS = 8;
 export const POSTS_PER_MONTH_GOAL = 8;
 

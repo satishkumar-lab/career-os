@@ -2,7 +2,6 @@ import type { StatCardData } from "@/components/dashboard/types";
 import type { Project, ProjectStatus } from "@/components/projects/types";
 import { Code2, Globe, Package, Zap } from "lucide-react";
 
-import { projects as seedProjects } from "@/lib/mock/projects";
 import {
   legacySeedColors,
   PROJECTS_STORAGE_KEY,
@@ -136,26 +135,7 @@ function migrateProjectsState(raw: unknown): ProjectsPersistedState {
 
 function createSeedState(): ProjectsPersistedState {
   return {
-    projects: seedProjects.map((project) => {
-      const startDate = project.startedLabel.replace(/^Started\s+/i, "");
-
-      return {
-        id: crypto.randomUUID(),
-        name: project.name,
-        description: project.description,
-        status: project.status,
-        startDate,
-        endDate: "",
-        techStack: project.techStack,
-        githubUrl: project.githubUrl ?? "",
-        liveUrl: project.liveUrl ?? "",
-        thumbnail: { type: "none" },
-        favourite: false,
-        archived: false,
-        notes: "",
-        colorKey: project.id,
-      };
-    }),
+    projects: [],
   };
 }
 

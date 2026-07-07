@@ -3,7 +3,7 @@ import type { InstagramContentType, InstagramPostStatus } from "@/components/ins
 export const INSTAGRAM_STORAGE_KEY = "career-os-instagram";
 
 export const FOLLOWER_TARGET = 5000;
-export const BASELINE_FOLLOWERS = 841;
+export const BASELINE_FOLLOWERS = 0;
 export const GROWTH_WEEKS = 8;
 
 export const instagramContentTypes: InstagramContentType[] = [

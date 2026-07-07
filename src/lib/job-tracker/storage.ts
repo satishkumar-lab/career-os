@@ -10,7 +10,6 @@ import type {
 } from "@/components/job-tracker/types";
 import { Briefcase, CheckCircle2, TrendingUp, Trophy } from "lucide-react";
 
-import { jobApplications as seedApplications } from "@/lib/mock/job-tracker";
 import {
   applicationStatuses,
   currentStages,
@@ -391,33 +390,7 @@ function migrateJobTrackerState(raw: unknown): JobTrackerPersistedState {
 
 function createSeedState(): JobTrackerPersistedState {
   return {
-    applications: seedApplications.map((application) =>
-      syncApplicationFromPipeline({
-        id: crypto.randomUUID(),
-        companyName: application.company,
-        jobTitle: application.role,
-        jobType: "Full-time",
-        workMode: "Remote",
-        location: "",
-        appliedDate: legacySeedDates[application.id] ?? "",
-        currentStage: legacySeedStages[application.id] ?? "Applied",
-        applicationStatus: legacySeedClosed[application.id] ? "Closed" : "Active",
-        salary: "",
-        jobUrl: "",
-        recruiterName: "",
-        recruiterEmail: "",
-        recruiterLinkedIn: "",
-        interviewDate: "",
-        notes: "",
-        favourite: false,
-        archived: false,
-        iconKey: (legacySeedIcons[application.id] as JobIconKey) ?? "default",
-        pipeline: createDefaultPipeline(
-          (legacySeedIcons[application.id] as JobIconKey) ?? "default",
-          application.id
-        ),
-      })
-    ),
+    applications: [],
   };
 }
 

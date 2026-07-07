@@ -8,7 +8,6 @@ import type {
 } from "@/components/ai-tools/types";
 import { BarChart3, Code2, Trophy, Zap } from "lucide-react";
 
-import { aiTools as seedTools } from "@/lib/mock/ai-tools";
 import {
   AI_TOOLS_STORAGE_KEY,
   aiToolIconPresets,
@@ -132,31 +131,14 @@ function migrateAiToolsState(raw: unknown): AiToolsPersistedState {
 
   return {
     tools: state.tools.map(migrateToolRecord),
-    totalSessions: typeof state.totalSessions === "string" ? state.totalSessions : "52",
+    totalSessions: typeof state.totalSessions === "string" ? state.totalSessions : "0",
   };
 }
 
 function createSeedState(): AiToolsPersistedState {
   return {
-    tools: seedTools.map((tool) => {
-      const iconKey = tool.id as AiToolIconKey;
-
-      return {
-        id: crypto.randomUUID(),
-        name: tool.name,
-        category: defaultCategoryByIconKey[iconKey],
-        lastUsedLabel: tool.lastUsedLabel,
-        level: tool.level,
-        percent: tool.percent,
-        projectsBuilt: tool.projectsBuilt,
-        website: "",
-        logo: { type: "preset", iconKey },
-        note: tool.note,
-        favourite: false,
-        status: "active",
-      };
-    }),
-    totalSessions: "52",
+    tools: [],
+    totalSessions: "0",
   };
 }
 
