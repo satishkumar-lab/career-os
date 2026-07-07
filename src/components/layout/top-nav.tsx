@@ -3,14 +3,14 @@
 import { Bell, Search } from "lucide-react";
 import { useEffect, useRef, type ReactNode } from "react";
 
+import { ProfileMenu } from "@/components/layout/profile-menu";
 import { usePageSearch } from "@/lib/search/search-context";
-import { useProfile } from "@/lib/settings/profile-context";
-import { deriveInitials } from "@/lib/settings/storage";
 import { cn } from "@/lib/utils";
 import { iconButton } from "@/lib/interaction-styles";
 
 export interface TopNavUser {
   initials: string;
+  email?: string;
   photoDataUrl?: string;
 }
 
@@ -23,10 +23,8 @@ export interface TopNavProps {
 }
 
 export function TopNav({ user: _user, hasUnreadNotifications, mobileMenuTrigger, className }: TopNavProps) {
-  const { user: profileUser } = useProfile();
   const { query, setQuery } = usePageSearch();
   const inputRef = useRef<HTMLInputElement>(null);
-  const avatarInitials = deriveInitials(profileUser.name) || profileUser.initials || "?";
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -84,18 +82,7 @@ export function TopNav({ user: _user, hasUnreadNotifications, mobileMenuTrigger,
           )}
         </button>
 
-        <button
-          type="button"
-          className={cn(
-            "flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary text-[11px] font-medium text-primary-foreground shadow-sm transition-[box-shadow,opacity] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:opacity-90",
-          )}
-        >
-          {profileUser.photoDataUrl ? (
-            <img src={profileUser.photoDataUrl} alt="" className="size-full object-cover" />
-          ) : (
-            avatarInitials
-          )}
-        </button>
+        <ProfileMenu />
       </div>
     </header>
   );

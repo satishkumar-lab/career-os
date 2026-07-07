@@ -29,7 +29,7 @@ export interface NavSection {
  */
 export const navSections: NavSection[] = [
   {
-    items: [{ label: "Dashboard", href: "/", icon: LayoutDashboard }],
+    items: [{ label: "Dashboard", href: "/dashboard", icon: LayoutDashboard }],
   },
   {
     title: "Build",

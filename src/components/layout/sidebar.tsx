@@ -2,18 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Flame, Settings, Zap } from "lucide-react";
+import { Flame, Settings } from "lucide-react";
+
+import { CareerOsLogoMark } from "@/components/auth/careeros-logo";
 
 import { cn } from "@/lib/utils";
+import { APP_NAME } from "@/lib/auth/branding";
 import { navItemActive, navItemBase } from "@/lib/interaction-styles";
 import { navSections } from "@/components/layout/nav-items";
 import { DarkModeToggle } from "@/components/layout/dark-mode-toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/shared/user-avatar";
 import { useProfile } from "@/lib/settings/profile-context";
-import { deriveInitials } from "@/lib/settings/storage";
 
 export interface SidebarUser {
   name: string;
+  email?: string;
   status?: string;
   initials: string;
   photoDataUrl?: string;
@@ -26,7 +29,6 @@ export interface SidebarProps {
 }
 
 function isNavItemActive(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -37,7 +39,6 @@ function isNavItemActive(pathname: string, href: string) {
  */
 export function Sidebar({ user: _user, streakDays, className }: SidebarProps) {
   const { user: profileUser } = useProfile();
-  const avatarInitials = deriveInitials(profileUser.name) || profileUser.initials || "?";
   // `usePathname()` is populated from the current request URL during SSR
   // and from the same URL on the client's first render, so the active nav
   // item is identical in both passes. `pathname` can briefly be `null`
@@ -47,12 +48,10 @@ export function Sidebar({ user: _user, streakDays, className }: SidebarProps) {
   return (
     <div className={cn("flex h-full w-full flex-col bg-card", className)}>
       <div className="flex h-16 shrink-0 items-center border-b border-border px-5">
-        <Link href="/" className="flex items-center gap-3 rounded-2xl transition-opacity duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:opacity-80">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-2xl bg-primary shadow-sm">
-            <Zap className="size-[15px] fill-primary-foreground text-primary-foreground" />
-          </span>
+        <Link href="/dashboard" className="flex items-center gap-3 rounded-2xl transition-opacity duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:opacity-80">
+          <CareerOsLogoMark size="sm" priority />
           <span className="flex flex-col">
-            <span className="text-[15px] font-semibold tracking-tight text-foreground">CareerOS</span>
+            <span className="text-[15px] font-semibold tracking-tight text-foreground">{APP_NAME}</span>
             <span className="text-[10px] font-medium text-muted-foreground">Personal Growth OS</span>
           </span>
         </Link>
@@ -96,7 +95,7 @@ export function Sidebar({ user: _user, streakDays, className }: SidebarProps) {
       {typeof streakDays === "number" && (
         <div className="shrink-0 px-3 pb-3">
           <div
-            className="flex flex-col gap-1 rounded-2xl p-4"
+            className="flex flex-col gap-1 rounded-[14px] p-4"
             style={{ backgroundImage: "linear-gradient(161deg, #17a5fb 0%, #e80584 100%)" }}
           >
             <div className="flex items-center gap-2">
@@ -124,14 +123,7 @@ export function Sidebar({ user: _user, streakDays, className }: SidebarProps) {
         </Link>
 
         <div className="mt-1 flex items-center gap-3 rounded-2xl p-3">
-          <Avatar key={profileUser.photoDataUrl ?? "no-photo"} className="size-8 shrink-0 after:hidden">
-            {profileUser.photoDataUrl ? (
-              <AvatarImage src={profileUser.photoDataUrl} alt="" className="rounded-full" />
-            ) : null}
-            <AvatarFallback className="rounded-full bg-primary text-[11px] font-medium text-primary-foreground shadow-sm">
-              {avatarInitials}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar user={profileUser} size="sm" />
           <span className="flex min-w-0 flex-col">
             <span className="truncate text-[13px] font-medium text-foreground">{profileUser.name}</span>
             {profileUser.status && (

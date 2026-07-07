@@ -35,14 +35,15 @@ export function DashboardHeader({ name, streakDays, streakNote }: DashboardHeade
   })
     .format(now)
     .replace(",", " ·");
-  const firstName = name.split(" ")[0];
+  const firstName = name.trim().split(/\s+/)[0] ?? "";
+  const greetingName = firstName ? `, ${firstName}` : "";
 
   return (
     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
       <div>
         <p className="text-[11.5px] font-medium tracking-[0.09em] text-muted-foreground uppercase">{dateLabel}</p>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-[30px]">
-          {getGreeting(now.getHours())}, {firstName} 👋
+          {getGreeting(now.getHours())}{greetingName} 👋
         </h1>
         <p className="mt-2 text-[14.5px] font-medium text-muted-foreground">Am I becoming better than yesterday?</p>
       </div>

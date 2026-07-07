@@ -1,0 +1,16 @@
+{
+  "name": "CareerOS",
+  "short_name": "CareerOS",
+  "description": "Your Personal Growth Operating System",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f7f5",
+  "theme_color": "#17a5fb",
+  "icons": [
+    {
+      "src": "/careeros-logo.png",
+      "sizes": "344x344",
+      "type": "image/png"
+    }
+  ]
+}

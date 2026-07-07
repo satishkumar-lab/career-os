@@ -13,8 +13,31 @@ const fontMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CareerOS",
-  description: "Your personal career dashboard.",
+  title: {
+    default: "CareerOS",
+    template: "%s · CareerOS",
+  },
+  description: "Your Personal Growth Operating System",
+  applicationName: "CareerOS",
+  appleWebApp: {
+    title: "CareerOS",
+  },
+  openGraph: {
+    title: "CareerOS",
+    description: "Your Personal Growth Operating System",
+    siteName: "CareerOS",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "CareerOS",
+    description: "Your Personal Growth Operating System",
+  },
+  icons: {
+    icon: "/careeros-logo.png",
+    apple: "/careeros-logo.png",
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({

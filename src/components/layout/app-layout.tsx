@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import { Menu } from "lucide-react";
 
+import { AuthLoadingScreen } from "@/components/auth/auth-loading-screen";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/layout/sidebar";
 import { TopNav } from "@/components/layout/top-nav";
@@ -23,8 +24,12 @@ function AppLayoutInner({
   hasUnreadNotifications,
   children,
 }: AppLayoutProps) {
-  const { user } = useProfile();
+  const { user, isProfileReady } = useProfile();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  if (!isProfileReady) {
+    return <AuthLoadingScreen message="Loading your workspace…" />;
+  }
 
   return (
     <SearchProvider>
