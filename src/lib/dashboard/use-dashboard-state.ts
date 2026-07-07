@@ -6,13 +6,7 @@ import { usePathname } from "next/navigation";
 import { loadDashboardModuleStates, type DashboardModuleStates } from "@/lib/dashboard/state";
 
 export function useDashboardState() {
-  const [state, setState] = useState<DashboardModuleStates | null>(() => {
-    if (typeof window === "undefined") {
-      return null;
-    }
-
-    return loadDashboardModuleStates();
-  });
+  const [state, setState] = useState<DashboardModuleStates | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {

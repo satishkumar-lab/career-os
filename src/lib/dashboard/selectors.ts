@@ -228,7 +228,7 @@ function buildFocusCandidates(states: DashboardModuleStates): FocusCandidate[] {
     .forEach((goal) => {
       candidates.push({
         id: `goal-${goal.id}`,
-        label: `Complete ${goal.goalTitle}`,
+        label: goal.goalTitle,
         sortDate: parseDashboardDate(goal.targetDate),
       });
     });

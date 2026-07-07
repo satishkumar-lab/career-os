@@ -28,10 +28,26 @@ export function DashboardPageContent({ user }: DashboardPageContentProps) {
     [state]
   );
 
-  if (!state || !dashboardData) {
-    return null;
-  }
+  return (
+    <AppLayout
+      user={user}
+      streakDays={dashboardData?.streak.days}
+      hasUnreadNotifications
+    >
+      {dashboardData ? (
+        <DashboardCards user={user} dashboardData={dashboardData} />
+      ) : null}
+    </AppLayout>
+  );
+}
 
+function DashboardCards({
+  user,
+  dashboardData,
+}: {
+  user: SidebarUser;
+  dashboardData: NonNullable<ReturnType<typeof buildDashboardData>>;
+}) {
   const {
     streak,
     stats,
@@ -45,29 +61,27 @@ export function DashboardPageContent({ user }: DashboardPageContentProps) {
   } = dashboardData;
 
   return (
-    <AppLayout user={user} streakDays={streak.days} hasUnreadNotifications>
-      <div className="flex flex-col gap-6">
-        <DashboardHeader name={user.name} streakDays={streak.days} streakNote={streak.note} />
+    <div className="flex flex-col gap-6">
+      <DashboardHeader name={user.name} streakDays={streak.days} streakNote={streak.note} />
 
-        <StatsRow stats={stats} />
+      <StatsRow stats={stats} />
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <TodayTasksCard initialTasks={tasks} />
-          <ActiveGoalsCard goals={goals} />
-          <div className="flex flex-col gap-4">
-            <UpcomingCard events={upcomingEvents} />
-            <QuickActionsCard actions={quickActions} />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <RecentActivityCard activity={recentActivity} className="lg:col-span-2" />
-          <div className="flex flex-col gap-4">
-            <SocialGrowthCard items={socialGrowth} />
-            <AiFocusCard icon={aiFocus.icon} segments={aiFocus.segments} />
-          </div>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <TodayTasksCard initialTasks={tasks} />
+        <ActiveGoalsCard goals={goals} />
+        <div className="flex flex-col gap-4">
+          <UpcomingCard events={upcomingEvents} />
+          <QuickActionsCard actions={quickActions} />
         </div>
       </div>
-    </AppLayout>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <RecentActivityCard activity={recentActivity} className="lg:col-span-2" />
+        <div className="flex flex-col gap-4">
+          <SocialGrowthCard items={socialGrowth} />
+          <AiFocusCard icon={aiFocus.icon} segments={aiFocus.segments} />
+        </div>
+      </div>
+    </div>
   );
 }
