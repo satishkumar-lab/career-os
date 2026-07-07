@@ -1,20 +1,59 @@
-import { Code2, ExternalLink } from "lucide-react";
+"use client";
+
+import {
+  Archive,
+  ArchiveRestore,
+  Code2,
+  ExternalLink,
+  MoreHorizontal,
+  Pencil,
+  Star,
+  Trash2,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { GithubIcon } from "@/components/projects/github-icon";
+import { cn } from "@/lib/utils";
+import { cardInteractive } from "@/lib/interaction-styles";
 import type { Project, ProjectStatus } from "@/components/projects/types";
 
 const statusStyles: Record<ProjectStatus, { bg: string; text: string }> = {
-  Live: { bg: "#f0fdf4", text: "#10b981" },
+  Planning: { bg: "#f8f8f8", text: "#94a3b8" },
   Building: { bg: "#eef0ff", text: "#5b5bd6" },
+  Live: { bg: "#f0fdf4", text: "#10b981" },
+  Completed: { bg: "#eff6ff", text: "#0ea5e9" },
+  Archived: { bg: "#f1f5f9", text: "#64748b" },
 };
 
-export function ProjectCard({ project }: { project: Project }) {
+export interface ProjectCardProps {
+  project: Project;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onArchive: (id: string) => void;
+  onRestore: (id: string) => void;
+  onToggleFavourite: (id: string) => void;
+}
+
+export function ProjectCard({
+  project,
+  onEdit,
+  onDelete,
+  onArchive,
+  onRestore,
+  onToggleFavourite,
+}: ProjectCardProps) {
   const status = statusStyles[project.status];
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 shadow-[0px_1px_1.5px_rgba(0,0,0,0.04),0px_2px_4px_rgba(0,0,0,0.02)]">
+    <div className={cn(cardInteractive, "p-5")}>
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <span
@@ -28,12 +67,54 @@ export function ProjectCard({ project }: { project: Project }) {
             <p className="text-[11.5px] font-medium text-muted-foreground">{project.startedLabel}</p>
           </div>
         </div>
-        <Badge
-          className="rounded-full border-transparent px-2.5 py-1 text-[11px] font-medium"
-          style={{ backgroundColor: status.bg, color: status.text }}
-        >
-          {project.status}
-        </Badge>
+        <div className="flex items-center gap-1">
+          <Badge
+            className="rounded-full border-transparent px-2.5 py-1 text-[11px] font-medium"
+            style={{ backgroundColor: status.bg, color: status.text }}
+          >
+            {project.status}
+          </Badge>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="size-7 shrink-0 text-muted-foreground"
+                  aria-label={`Actions for ${project.name}`}
+                />
+              }
+            >
+              <MoreHorizontal className="size-3.5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => onEdit(project.id)}>
+                <Pencil className="size-3.5" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onToggleFavourite(project.id)}>
+                <Star className="size-3.5" />
+                {project.favourite ? "Unfavourite" : "Favourite"}
+              </DropdownMenuItem>
+              {project.archived ? (
+                <DropdownMenuItem onClick={() => onRestore(project.id)}>
+                  <ArchiveRestore className="size-3.5" />
+                  Restore
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem onClick={() => onArchive(project.id)}>
+                  <Archive className="size-3.5" />
+                  Archive
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive" onClick={() => onDelete(project.id)}>
+                <Trash2 className="size-3.5" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <p className="mt-3 text-[13px] font-medium text-muted-foreground">{project.description}</p>

@@ -1,13 +1,38 @@
-export type GoalCategory = "Career" | "Learning" | "Branding" | "Portfolio" | "Project";
+export type GoalCategory =
+  | "Learning"
+  | "Career"
+  | "Portfolio"
+  | "Certification"
+  | "Project"
+  | "Social Media"
+  | "Interview"
+  | "Personal";
 
-export type GoalPriority = "High" | "Medium";
+export type GoalDisplayCategory =
+  | "Career"
+  | "Learning"
+  | "Branding"
+  | "Portfolio"
+  | "Project"
+  | "Certification"
+  | "Interview"
+  | "Personal";
+
+export type GoalPriority = "High" | "Medium" | "Low";
+
+export type GoalWorkflowStatus =
+  | "Not Started"
+  | "In Progress"
+  | "Completed"
+  | "On Hold"
+  | "Archived";
 
 export type GoalStatus = "On Track" | "Behind";
 
 export interface Goal {
   id: string;
   title: string;
-  category: GoalCategory;
+  category: GoalDisplayCategory;
   priority: GoalPriority;
   status: GoalStatus;
   dueLabel: string;
@@ -15,4 +40,6 @@ export interface Goal {
   color: string;
   trackTint: string;
   iconTint: string;
+  favourite: boolean;
+  archived: boolean;
 }

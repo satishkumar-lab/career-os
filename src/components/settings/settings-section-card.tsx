@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Badge } from "@/components/ui/badge";
+import { cardShell } from "@/lib/interaction-styles";
 import { cn } from "@/lib/utils";
 
 export interface SettingsSectionCardProps {
@@ -20,10 +21,7 @@ export function SettingsSectionCard({
 }: SettingsSectionCardProps) {
   return (
     <section
-      className={cn(
-        "rounded-2xl border border-border bg-card shadow-[0px_1px_1.5px_rgba(0,0,0,0.04),0px_2px_4px_rgba(0,0,0,0.02)]",
-        className
-      )}
+      className={cn(cardShell, className)}
     >
       <div className="border-b border-border px-6 py-5">
         <div className="flex flex-wrap items-center gap-2.5">

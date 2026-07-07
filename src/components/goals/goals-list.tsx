@@ -1,19 +1,45 @@
-import { Calendar, Flag } from "lucide-react";
+"use client";
 
+import {
+  Archive,
+  ArchiveRestore,
+  Calendar,
+  Flag,
+  MoreHorizontal,
+  Pencil,
+  Star,
+  Trash2,
+} from "lucide-react";
+
+import { AnimatedProgressFill } from "@/components/ui/animated-progress-fill";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import type { Goal, GoalCategory, GoalPriority, GoalStatus } from "@/components/goals/types";
+import { cardShell, listRowHover } from "@/lib/interaction-styles";
+import { SearchEmptyState } from "@/components/shared/search-empty-state";
+import type { Goal, GoalDisplayCategory, GoalPriority, GoalStatus } from "@/components/goals/types";
 
-const categoryStyles: Record<GoalCategory, { bg: string; text: string }> = {
+const categoryStyles: Record<GoalDisplayCategory, { bg: string; text: string }> = {
   Career: { bg: "rgba(91,91,214,0.08)", text: "#5b5bd6" },
   Learning: { bg: "rgba(16,185,129,0.08)", text: "#10b981" },
   Branding: { bg: "rgba(245,158,11,0.08)", text: "#f59e0b" },
   Portfolio: { bg: "rgba(139,92,246,0.08)", text: "#8b5cf6" },
   Project: { bg: "rgba(236,72,153,0.08)", text: "#ec4899" },
+  Certification: { bg: "rgba(14,165,233,0.08)", text: "#0ea5e9" },
+  Interview: { bg: "rgba(249,115,22,0.08)", text: "#f97316" },
+  Personal: { bg: "rgba(100,116,139,0.08)", text: "#64748b" },
 };
 
 const priorityStyles: Record<GoalPriority, { bg: string; text: string }> = {
   High: { bg: "#fff1f2", text: "#ef4444" },
   Medium: { bg: "#fffbeb", text: "#f59e0b" },
+  Low: { bg: "#f8fafc", text: "#64748b" },
 };
 
 const statusStyles: Record<GoalStatus, { bg: string; text: string }> = {
@@ -38,7 +64,25 @@ function GoalBadge({
   );
 }
 
-function GoalRow({ goal, isLast }: { goal: Goal; isLast: boolean }) {
+interface GoalRowProps {
+  goal: Goal;
+  isLast: boolean;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onArchive: (id: string) => void;
+  onRestore: (id: string) => void;
+  onToggleFavourite: (id: string) => void;
+}
+
+function GoalRow({
+  goal,
+  isLast,
+  onEdit,
+  onDelete,
+  onArchive,
+  onRestore,
+  onToggleFavourite,
+}: GoalRowProps) {
   const category = categoryStyles[goal.category];
   const priority = priorityStyles[goal.priority];
   const status = statusStyles[goal.status];
@@ -47,6 +91,7 @@ function GoalRow({ goal, isLast }: { goal: Goal; isLast: boolean }) {
     <div
       className={cn(
         "flex flex-wrap items-start gap-4 px-6 py-5 sm:flex-nowrap sm:items-center",
+        listRowHover,
         !isLast && "border-b border-border"
       )}
     >
@@ -79,9 +124,9 @@ function GoalRow({ goal, isLast }: { goal: Goal; isLast: boolean }) {
           className="mt-2 h-[5px] w-full overflow-hidden rounded-full"
           style={{ backgroundColor: goal.trackTint }}
         >
-          <div
-            className="h-full rounded-full"
-            style={{ width: `${goal.percent}%`, backgroundColor: goal.color }}
+          <AnimatedProgressFill
+            value={goal.percent}
+            style={{ backgroundColor: goal.color }}
           />
         </div>
       </div>
@@ -92,16 +137,88 @@ function GoalRow({ goal, isLast }: { goal: Goal; isLast: boolean }) {
       >
         {goal.percent}%
       </p>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="size-7 shrink-0 text-muted-foreground"
+              aria-label={`Actions for ${goal.title}`}
+            />
+          }
+        >
+          <MoreHorizontal className="size-3.5" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => onEdit(goal.id)}>
+            <Pencil className="size-3.5" />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onToggleFavourite(goal.id)}>
+            <Star className="size-3.5" />
+            {goal.favourite ? "Unfavourite" : "Favourite"}
+          </DropdownMenuItem>
+          {goal.archived ? (
+            <DropdownMenuItem onClick={() => onRestore(goal.id)}>
+              <ArchiveRestore className="size-3.5" />
+              Restore
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onClick={() => onArchive(goal.id)}>
+              <Archive className="size-3.5" />
+              Archive
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive" onClick={() => onDelete(goal.id)}>
+            <Trash2 className="size-3.5" />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
 
-export function GoalsList({ goals }: { goals: Goal[] }) {
+export interface GoalsListProps {
+  goals: Goal[];
+  isSearchEmpty?: boolean;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onArchive: (id: string) => void;
+  onRestore: (id: string) => void;
+  onToggleFavourite: (id: string) => void;
+}
+
+export function GoalsList({
+  goals,
+  isSearchEmpty = false,
+  onEdit,
+  onDelete,
+  onArchive,
+  onRestore,
+  onToggleFavourite,
+}: GoalsListProps) {
   return (
-    <div className="rounded-2xl border border-border bg-card shadow-[0px_1px_1.5px_rgba(0,0,0,0.04),0px_2px_4px_rgba(0,0,0,0.02)]">
-      {goals.map((goal, index) => (
-        <GoalRow key={goal.id} goal={goal} isLast={index === goals.length - 1} />
-      ))}
+    <div className={cardShell}>
+      {isSearchEmpty && goals.length === 0 ? (
+        <SearchEmptyState />
+      ) : (
+        goals.map((goal, index) => (
+          <GoalRow
+            key={goal.id}
+            goal={goal}
+            isLast={index === goals.length - 1}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onArchive={onArchive}
+            onRestore={onRestore}
+            onToggleFavourite={onToggleFavourite}
+          />
+        ))
+      )}
     </div>
   );
 }

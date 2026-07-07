@@ -1,8 +1,14 @@
+"use client";
+
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-export function LinkedInHeader() {
+export interface LinkedInHeaderProps {
+  onLogPost: () => void;
+}
+
+export function LinkedInHeader({ onLogPost }: LinkedInHeaderProps) {
   return (
     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
       <div>
@@ -11,7 +17,7 @@ export function LinkedInHeader() {
           Track follower growth, posts, and engagement.
         </p>
       </div>
-      <Button className="rounded-2xl px-4 py-2 shadow-sm">
+      <Button className="rounded-2xl px-4 py-2 shadow-sm" onClick={onLogPost}>
         <Plus className="size-3.5" />
         Log Post
       </Button>

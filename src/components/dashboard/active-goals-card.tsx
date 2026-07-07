@@ -1,4 +1,5 @@
 import { DashboardCard, ViewAllLink } from "@/components/dashboard/dashboard-card";
+import { AnimatedProgressFill } from "@/components/ui/animated-progress-fill";
 import type { GoalItem } from "@/components/dashboard/types";
 
 export interface ActiveGoalsCardProps {
@@ -9,6 +10,9 @@ export interface ActiveGoalsCardProps {
 export function ActiveGoalsCard({ goals, className }: ActiveGoalsCardProps) {
   return (
     <DashboardCard title="Active Goals" action={<ViewAllLink href="/goals" />} className={className}>
+      {goals.length === 0 ? (
+        <p className="text-[13px] font-medium text-muted-foreground">No active goals yet — add one to track progress</p>
+      ) : (
       <ul className="space-y-5">
         {goals.map((goal) => (
           <li key={goal.id} className="flex items-start gap-3">
@@ -21,9 +25,9 @@ export function ActiveGoalsCard({ goals, className }: ActiveGoalsCardProps) {
                 </p>
               </div>
               <div className="mt-1.5 h-[5px] w-full overflow-hidden rounded-full" style={{ backgroundColor: goal.tint }}>
-                <div
-                  className="h-full rounded-full"
-                  style={{ width: `${goal.percent}%`, backgroundColor: goal.color }}
+                <AnimatedProgressFill
+                  value={goal.percent}
+                  style={{ backgroundColor: goal.color }}
                 />
               </div>
               <p className="mt-1 text-[11px] font-medium text-muted-foreground">{goal.dueLabel}</p>
@@ -31,6 +35,7 @@ export function ActiveGoalsCard({ goals, className }: ActiveGoalsCardProps) {
           </li>
         ))}
       </ul>
+      )}
     </DashboardCard>
   );
 }

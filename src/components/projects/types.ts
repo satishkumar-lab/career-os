@@ -1,4 +1,4 @@
-export type ProjectStatus = "Live" | "Building";
+export type ProjectStatus = "Planning" | "Building" | "Live" | "Completed" | "Archived";
 
 export interface Project {
   id: string;
@@ -9,6 +9,8 @@ export interface Project {
   techStack: string[];
   githubUrl?: string;
   liveUrl?: string;
+  favourite: boolean;
+  archived: boolean;
   color: string;
   tint: string;
 }

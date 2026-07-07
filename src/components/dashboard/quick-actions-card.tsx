@@ -1,4 +1,6 @@
 import { DashboardCard } from "@/components/dashboard/dashboard-card";
+import { cn } from "@/lib/utils";
+import { contentCardRadius, interactiveSurface } from "@/lib/interaction-styles";
 import type { QuickAction } from "@/components/dashboard/types";
 
 export interface QuickActionsCardProps {
@@ -17,7 +19,11 @@ export function QuickActionsCard({ actions, className }: QuickActionsCardProps) 
             <button
               key={action.id}
               type="button"
-              className="flex items-center gap-2.5 rounded-2xl border border-border p-3 text-left transition-colors hover:bg-accent/60"
+              className={cn(
+                contentCardRadius,
+                "flex items-center gap-2.5 border border-border p-3 text-left",
+                interactiveSurface
+              )}
             >
               <span
                 className="flex size-7 shrink-0 items-center justify-center rounded-xl"

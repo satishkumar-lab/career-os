@@ -1,3 +1,7 @@
+export type LinkedInPostType = "Text" | "Carousel" | "Image" | "Video" | "Article";
+
+export type LinkedInPostStatus = "Draft" | "Scheduled" | "Published" | "Archived";
+
 export interface FollowerGrowthPoint {
   week: string;
   followers: number;
@@ -9,6 +13,8 @@ export interface LinkedInPost {
   dateLabel: string;
   reach: string;
   likesLabel: string;
+  favourite: boolean;
+  archived: boolean;
 }
 
 export interface FollowerGrowthSummary {

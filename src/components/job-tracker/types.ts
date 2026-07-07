@@ -1,6 +1,30 @@
 import type { LucideIcon } from "lucide-react";
 
-export type ApplicationStatus = "Technical Round" | "Assignment" | "Rejected" | "HR Round";
+export type JobType = "Full-time" | "Contract" | "Internship" | "Freelance";
+
+export type WorkMode = "Remote" | "Hybrid" | "On-site";
+
+export type CurrentStage =
+  | "Wishlist"
+  | "Applied"
+  | "HR Screening"
+  | "Assignment"
+  | "Technical Round"
+  | "Manager Round"
+  | "Final Round"
+  | "Offer"
+  | "Rejected"
+  | "Accepted";
+
+export type JobApplicationStatus = "Active" | "Closed";
+
+export type PipelineStageStatus = "Pending" | "Passed" | "Failed" | "Current";
+
+export interface JobPipelineStage {
+  id: string;
+  name: string;
+  status: PipelineStageStatus;
+}
 
 export type PipelineStageVariant = "applied" | "progress" | "inactive" | "rejected";
 
@@ -15,8 +39,10 @@ export interface JobApplication {
   company: string;
   role: string;
   appliedLabel: string;
-  status: ApplicationStatus;
+  status: CurrentStage;
   icon: LucideIcon;
   color: string;
   tint: string;
+  favourite: boolean;
+  archived: boolean;
 }

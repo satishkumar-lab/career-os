@@ -1,4 +1,6 @@
 import { DashboardCard, ViewAllLink } from "@/components/dashboard/dashboard-card";
+import { cn } from "@/lib/utils";
+import { contentCardRadius, subtleSurfaceHover } from "@/lib/interaction-styles";
 import type { UpcomingEvent } from "@/components/dashboard/types";
 
 export interface UpcomingCardProps {
@@ -14,7 +16,7 @@ export function UpcomingCard({ events, className }: UpcomingCardProps) {
           const Icon = event.icon;
 
           return (
-            <li key={event.id} className="flex items-center gap-3 rounded-2xl border border-border p-3">
+            <li key={event.id} className={cn("flex items-center gap-3 border border-border p-3", contentCardRadius, subtleSurfaceHover)}>
               <span
                 className="flex size-8 shrink-0 items-center justify-center rounded-xl"
                 style={{ backgroundColor: event.tint }}

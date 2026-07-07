@@ -1,4 +1,5 @@
 import { DashboardCard } from "@/components/dashboard/dashboard-card";
+import { AnimatedChartArea, AnimatedChartLine } from "@/components/ui/animated-chart-paths";
 import type { WeeklyHoursPoint } from "@/components/learning/types";
 
 export interface WeeklyHoursChartProps {
@@ -67,8 +68,8 @@ export function WeeklyHoursChart({ data, totalLabel }: WeeklyHoursChartProps) {
             <stop offset="100%" stopColor="#5b5bd6" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <path d={areaPath} fill="url(#weekly-hours-fill)" stroke="none" />
-        <path d={linePath} fill="none" stroke="#5b5bd6" strokeWidth={2} strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+        <AnimatedChartArea d={areaPath} fill="url(#weekly-hours-fill)" />
+        <AnimatedChartLine d={linePath} stroke="#5b5bd6" />
       </svg>
     </DashboardCard>
   );

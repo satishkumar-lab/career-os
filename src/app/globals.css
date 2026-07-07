@@ -128,3 +128,46 @@
     @apply font-sans;
   }
 }
+
+@keyframes progress-fill-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(var(--progress-scale, 1));
+  }
+}
+
+@keyframes chart-area-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .animate-progress-fill {
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: progress-fill-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .animate-chart-area-fade {
+    opacity: 0;
+    animation: chart-area-fade-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-progress-fill {
+    animation: none;
+    transform: scaleX(var(--progress-scale, 1));
+  }
+
+  .animate-chart-area-fade {
+    animation: none;
+    opacity: 1;
+  }
+}

@@ -1,19 +1,17 @@
+import type { CSSProperties } from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { contentCardRadius, statCellHover } from "@/lib/interaction-styles";
 import type { StatCardData } from "@/components/dashboard/types";
 
 export interface StatsRowProps {
   stats: StatCardData[];
 }
 
-/**
- * Single connected container (matching the Figma "StatsRow" frame) with
- * hairline dividers between each statistic instead of separate cards.
- */
 export function StatsRow({ stats }: StatsRowProps) {
   return (
-    <div className="grid grid-cols-2 overflow-hidden rounded-[16px] border border-border bg-card shadow-[0px_1px_4px_0px_rgba(0,0,0,0.04)] lg:grid-cols-4">
+    <div className={cn("grid grid-cols-2 overflow-hidden border border-border bg-card shadow-[0px_1px_4px_0px_rgba(0,0,0,0.04)] lg:grid-cols-4", contentCardRadius)}>
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         const trendUp = stat.trendUp ?? true;
@@ -23,8 +21,10 @@ export function StatsRow({ stats }: StatsRowProps) {
         return (
           <div
             key={stat.id}
+            style={{ "--stat-accent": stat.color } as CSSProperties}
             className={cn(
               "border-border p-5",
+              statCellHover,
               index % 2 === 1 && "border-l",
               index >= 2 && "border-t lg:border-t-0",
               index > 0 && "lg:border-l"

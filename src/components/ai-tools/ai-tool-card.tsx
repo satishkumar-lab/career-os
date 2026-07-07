@@ -1,6 +1,18 @@
-import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
+"use client";
+
+import { MoreHorizontal, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { AnimatedProgressFill } from "@/components/ui/animated-progress-fill";
+import { cn } from "@/lib/utils";
+import { cardInteractive, textAction } from "@/lib/interaction-styles";
 import type { AiTool, AiToolLevel } from "@/components/ai-tools/types";
 
 const levelStyles: Record<AiToolLevel, { bg: string; text: string }> = {
@@ -10,12 +22,18 @@ const levelStyles: Record<AiToolLevel, { bg: string; text: string }> = {
   Expert: { bg: "#f0fdf4", text: "#10b981" },
 };
 
-export function AiToolCard({ tool }: { tool: AiTool }) {
+export interface AiToolCardProps {
+  tool: AiTool;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+}
+
+export function AiToolCard({ tool, onEdit, onDelete }: AiToolCardProps) {
   const level = levelStyles[tool.level];
   const Icon = tool.icon;
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 shadow-[0px_1px_1.5px_rgba(0,0,0,0.04),0px_2px_4px_rgba(0,0,0,0.02)]">
+    <div className={cn(cardInteractive, "p-5")}>
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <span
@@ -29,12 +47,34 @@ export function AiToolCard({ tool }: { tool: AiTool }) {
             <p className="text-[11.5px] font-medium text-muted-foreground">Last used: {tool.lastUsedLabel}</p>
           </div>
         </div>
-        <Badge
-          className="rounded-full border-transparent px-2.5 py-1 text-[11px] font-medium"
-          style={{ backgroundColor: level.bg, color: level.text }}
-        >
-          {tool.level}
-        </Badge>
+        <div className="flex items-center gap-1">
+          <Badge
+            className="rounded-full border-transparent px-2.5 py-1 text-[11px] font-medium"
+            style={{ backgroundColor: level.bg, color: level.text }}
+          >
+            {tool.level}
+          </Badge>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="size-7 shrink-0 text-muted-foreground"
+                  aria-label={`Actions for ${tool.name}`}
+                />
+              }
+            >
+              <MoreHorizontal className="size-3.5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem variant="destructive" onClick={() => onDelete(tool.id)}>
+                <Trash2 className="size-3.5" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <div className="mt-4">
@@ -44,22 +84,17 @@ export function AiToolCard({ tool }: { tool: AiTool }) {
             {tool.percent}%
           </p>
         </div>
-        <ProgressPrimitive.Root value={tool.percent} className="mt-2 block">
-          <ProgressPrimitive.Track
-            className="relative flex h-1.5 w-full items-center overflow-hidden rounded-full"
-            style={{ backgroundColor: tool.trackTint }}
-          >
-            <ProgressPrimitive.Indicator
-              className="h-full rounded-full transition-all"
-              style={{ backgroundColor: tool.color }}
-            />
-          </ProgressPrimitive.Track>
-        </ProgressPrimitive.Root>
+        <div
+          className="relative mt-2 flex h-1.5 w-full overflow-hidden rounded-full"
+          style={{ backgroundColor: tool.trackTint }}
+        >
+          <AnimatedProgressFill value={tool.percent} style={{ backgroundColor: tool.color }} />
+        </div>
       </div>
 
       <div className="mt-3 flex items-center justify-between">
         <p className="text-xs font-medium text-muted-foreground">{tool.projectsBuilt} projects built</p>
-        <button type="button" className="text-base font-medium text-primary">
+        <button type="button" className={cn("text-base font-medium text-primary", textAction)} onClick={() => onEdit(tool.id)}>
           Edit
         </button>
       </div>

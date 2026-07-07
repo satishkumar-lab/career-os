@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, Plus } from "lucide-react";
 
 import { DashboardCard } from "@/components/dashboard/dashboard-card";
 import { cn } from "@/lib/utils";
+import { iconButton, interactiveSurface } from "@/lib/interaction-styles";
 import type { TaskItem } from "@/components/dashboard/types";
 
 export interface TodayTasksCardProps {
@@ -15,6 +16,10 @@ export interface TodayTasksCardProps {
 export function TodayTasksCard({ initialTasks, className }: TodayTasksCardProps) {
   const [tasks, setTasks] = useState(initialTasks);
 
+  useEffect(() => {
+    setTasks(initialTasks);
+  }, [initialTasks]);
+
   function toggleTask(id: string) {
     setTasks((current) => current.map((task) => (task.id === id ? { ...task, done: !task.done } : task)));
   }
@@ -24,7 +29,7 @@ export function TodayTasksCard({ initialTasks, className }: TodayTasksCardProps)
       title="Today's Tasks"
       className={className}
       action={
-        <span className="flex size-7 items-center justify-center rounded-xl bg-primary/10">
+        <span className={cn("flex size-7 items-center justify-center rounded-xl bg-primary/10", iconButton)}>
           <Plus className="size-3.5 text-primary" />
         </span>
       }
@@ -35,7 +40,7 @@ export function TodayTasksCard({ initialTasks, className }: TodayTasksCardProps)
             <button
               type="button"
               onClick={() => toggleTask(task.id)}
-              className="flex w-full items-start gap-3 rounded-2xl p-2.5 text-left transition-colors hover:bg-accent/60"
+              className={cn("flex w-full items-start gap-3 rounded-2xl p-2.5 text-left", interactiveSurface)}
             >
               <span
                 className={cn(

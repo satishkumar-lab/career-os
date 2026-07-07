@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { navItemBase } from "@/lib/interaction-styles";
 
 const STORAGE_KEY = "careeros-theme";
 
@@ -41,7 +42,8 @@ export function DarkModeToggle({ className }: { className?: string }) {
       type="button"
       onClick={toggle}
       className={cn(
-        "flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+        "flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-[13px] font-medium text-muted-foreground",
+        navItemBase,
         className
       )}
     >

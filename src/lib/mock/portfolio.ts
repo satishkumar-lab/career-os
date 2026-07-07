@@ -1,7 +1,7 @@
 import { Code2, FileText, Globe, Zap } from "lucide-react";
 
 import type { StatCardData } from "@/components/dashboard/types";
-import type { PortfolioProject } from "@/components/portfolio/types";
+import type { PortfolioStage } from "@/components/portfolio/types";
 
 export const portfolioStats: StatCardData[] = [
   {
@@ -42,7 +42,13 @@ export const portfolioStats: StatCardData[] = [
   },
 ];
 
-export const portfolioProjects: PortfolioProject[] = [
+export interface PortfolioProjectSeed {
+  id: string;
+  name: string;
+  stages: Record<PortfolioStage, boolean>;
+}
+
+export const portfolioProjects: PortfolioProjectSeed[] = [
   {
     id: "fintech-dashboard",
     name: "Fintech Dashboard",

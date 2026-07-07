@@ -1,5 +1,9 @@
 import { TrendingUp } from "lucide-react";
 
+import { AnimatedProgressFill } from "@/components/ui/animated-progress-fill";
+import { AnimatedChartArea, AnimatedChartLine } from "@/components/ui/animated-chart-paths";
+import { cn } from "@/lib/utils";
+import { cardInteractive } from "@/lib/interaction-styles";
 import type { FollowerGrowthPoint, FollowerGrowthSummary } from "@/components/linkedin/types";
 
 const WIDTH = 1000;
@@ -48,7 +52,7 @@ export function FollowerGrowthCard({
   const progressPercent = (summary.current / summary.target) * 100;
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 shadow-[0px_1px_1.5px_rgba(0,0,0,0.04),0px_2px_4px_rgba(0,0,0,0.02)]">
+    <div className={cn(cardInteractive, "p-5")}>
       <div className="flex items-center justify-between">
         <p className="text-[14.5px] font-medium text-foreground">Follower Growth</p>
         <div className="flex items-center gap-1.5">
@@ -60,10 +64,7 @@ export function FollowerGrowthCard({
       <p className="mt-1 text-xs font-medium text-muted-foreground">{summary.progressLabel}</p>
 
       <div className="mt-4 h-[7px] w-full overflow-hidden rounded-full bg-[rgba(10,102,194,0.13)]">
-        <div
-          className="h-full rounded-full bg-[#0a66c2]"
-          style={{ width: `${progressPercent}%` }}
-        />
+        <AnimatedProgressFill value={progressPercent} className="bg-[#0a66c2]" />
       </div>
 
       <svg
@@ -79,15 +80,8 @@ export function FollowerGrowthCard({
             <stop offset="100%" stopColor="#0a66c2" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <path d={areaPath} fill="url(#follower-growth-fill)" stroke="none" />
-        <path
-          d={linePath}
-          fill="none"
-          stroke="#0a66c2"
-          strokeWidth={2}
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-        />
+        <AnimatedChartArea d={areaPath} fill="url(#follower-growth-fill)" />
+        <AnimatedChartLine d={linePath} stroke="#0a66c2" />
       </svg>
     </div>
   );

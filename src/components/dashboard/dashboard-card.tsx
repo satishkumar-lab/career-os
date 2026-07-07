@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { cardHover, contentCardRadius, textAction } from "@/lib/interaction-styles";
 
 export interface DashboardCardProps {
   title: string;
@@ -16,7 +17,7 @@ export interface DashboardCardProps {
  */
 export function DashboardCard({ title, action, className, children }: DashboardCardProps) {
   return (
-    <div className={cn("rounded-2xl border border-border bg-card p-5 shadow-xs", className)}>
+    <div className={cn(contentCardRadius, "border border-border bg-card p-5 shadow-xs", cardHover, className)}>
       <div className="flex items-center justify-between">
         <h2 className="text-[14.5px] font-medium tracking-tight text-foreground">{title}</h2>
         {action}
@@ -28,7 +29,7 @@ export function DashboardCard({ title, action, className, children }: DashboardC
 
 export function ViewAllLink({ href }: { href: string }) {
   return (
-    <a href={href} className="flex items-center gap-0.5 text-xs font-medium text-primary hover:underline">
+    <a href={href} className={cn("flex items-center gap-0.5 text-xs font-medium text-primary", textAction, "hover:underline")}>
       View all
       <ChevronRight className="size-3" />
     </a>

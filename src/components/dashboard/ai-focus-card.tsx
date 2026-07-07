@@ -1,5 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 
+import { cardHover, contentCardRadius } from "@/lib/interaction-styles";
+import { cn } from "@/lib/utils";
+
 export interface AiFocusCardProps {
   icon: LucideIcon;
   segments: { text: string; bold: boolean }[];
@@ -8,7 +11,7 @@ export interface AiFocusCardProps {
 
 export function AiFocusCard({ icon: Icon, segments, className }: AiFocusCardProps) {
   return (
-    <div className={`rounded-2xl border border-border bg-card p-4 shadow-xs ${className ?? ""}`}>
+    <div className={cn(contentCardRadius, "border border-border bg-card p-4 shadow-xs", cardHover, className)}>
       <div className="flex items-start gap-3">
         <span
           className="flex size-8 shrink-0 items-center justify-center rounded-2xl shadow-sm"

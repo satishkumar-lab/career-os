@@ -9,6 +9,7 @@ import { Sidebar, type SidebarUser } from "@/components/layout/sidebar";
 import { TopNav } from "@/components/layout/top-nav";
 import { MainContent } from "@/components/layout/main-content";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { SearchProvider } from "@/lib/search/search-context";
 
 export interface AppLayoutProps {
   user: SidebarUser;
@@ -26,7 +27,8 @@ export function AppLayout({ user, streakDays, hasUnreadNotifications, children }
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
-    <div className="flex h-svh overflow-hidden bg-background">
+    <SearchProvider>
+      <div className="flex h-svh overflow-hidden bg-background">
       <div className="hidden w-[230px] shrink-0 border-r border-border md:block">
         <Sidebar user={user} streakDays={streakDays} />
       </div>
@@ -51,6 +53,7 @@ export function AppLayout({ user, streakDays, hasUnreadNotifications, children }
         />
         <MainContent>{children}</MainContent>
       </div>
-    </div>
+      </div>
+    </SearchProvider>
   );
 }

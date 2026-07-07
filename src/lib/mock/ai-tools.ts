@@ -1,20 +1,7 @@
-import { BarChart3, Code2, Heart, Trophy, Zap } from "lucide-react";
+import { BarChart3, Code2, Trophy, Zap } from "lucide-react";
 
 import type { StatCardData } from "@/components/dashboard/types";
-import type { AiTool } from "@/components/ai-tools/types";
-import {
-  ClaudeLogo,
-  CursorLogo,
-  GeminiLogo,
-  OpenAiLogo,
-  PerplexityLogo,
-  WindsurfLogo,
-} from "@/components/ai-tools/brand-icons";
-
-/**
- * Mock data standing in for the CareerOS API/Supabase queries for the
- * AI Tools page. Shapes mirror the expected real endpoints.
- */
+import type { AiToolLevel } from "@/components/ai-tools/types";
 
 export const aiToolsStats: StatCardData[] = [
   {
@@ -55,7 +42,17 @@ export const aiToolsStats: StatCardData[] = [
   },
 ];
 
-export const aiTools: AiTool[] = [
+export interface AiToolSeed {
+  id: string;
+  name: string;
+  lastUsedLabel: string;
+  level: AiToolLevel;
+  percent: number;
+  projectsBuilt: number;
+  note: string;
+}
+
+export const aiTools: AiToolSeed[] = [
   {
     id: "claude",
     name: "Claude",
@@ -64,10 +61,6 @@ export const aiTools: AiTool[] = [
     percent: 78,
     projectsBuilt: 12,
     note: "Writing, code review, summarization",
-    icon: ClaudeLogo,
-    color: "#5b5bd6",
-    tint: "rgba(91,91,214,0.09)",
-    trackTint: "rgba(91,91,214,0.13)",
   },
   {
     id: "chatgpt",
@@ -77,10 +70,6 @@ export const aiTools: AiTool[] = [
     percent: 90,
     projectsBuilt: 28,
     note: "Daily driver for quick questions",
-    icon: OpenAiLogo,
-    color: "#10b981",
-    tint: "rgba(16,185,129,0.09)",
-    trackTint: "rgba(16,185,129,0.13)",
   },
   {
     id: "cursor",
@@ -90,10 +79,6 @@ export const aiTools: AiTool[] = [
     percent: 55,
     projectsBuilt: 6,
     note: "Building personal projects",
-    icon: CursorLogo,
-    color: "#0ea5e9",
-    tint: "rgba(14,165,233,0.09)",
-    trackTint: "rgba(14,165,233,0.13)",
   },
   {
     id: "gemini",
@@ -103,10 +88,6 @@ export const aiTools: AiTool[] = [
     percent: 30,
     projectsBuilt: 2,
     note: "Exploring multimodal features",
-    icon: GeminiLogo,
-    color: "#f59e0b",
-    tint: "rgba(245,158,11,0.09)",
-    trackTint: "rgba(245,158,11,0.13)",
   },
   {
     id: "perplexity",
@@ -116,10 +97,6 @@ export const aiTools: AiTool[] = [
     percent: 72,
     projectsBuilt: 0,
     note: "Research and fact-checking",
-    icon: PerplexityLogo,
-    color: "#8b5cf6",
-    tint: "rgba(139,92,246,0.09)",
-    trackTint: "rgba(139,92,246,0.13)",
   },
   {
     id: "windsurf",
@@ -129,10 +106,6 @@ export const aiTools: AiTool[] = [
     percent: 20,
     projectsBuilt: 1,
     note: "Just started exploring",
-    icon: WindsurfLogo,
-    color: "#ec4899",
-    tint: "rgba(236,72,153,0.09)",
-    trackTint: "rgba(236,72,153,0.13)",
   },
   {
     id: "lovable",
@@ -142,10 +115,6 @@ export const aiTools: AiTool[] = [
     percent: 48,
     projectsBuilt: 3,
     note: "Rapid UI prototyping",
-    icon: Heart,
-    color: "#f97316",
-    tint: "rgba(249,115,22,0.09)",
-    trackTint: "rgba(249,115,22,0.13)",
   },
   {
     id: "bolt",
@@ -155,9 +124,5 @@ export const aiTools: AiTool[] = [
     percent: 25,
     projectsBuilt: 1,
     note: "Testing for client projects",
-    icon: Zap,
-    color: "#64748b",
-    tint: "rgba(100,116,139,0.09)",
-    trackTint: "rgba(100,116,139,0.13)",
   },
 ];

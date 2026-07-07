@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Flame, Settings, Zap } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { navItemActive, navItemBase } from "@/lib/interaction-styles";
 import { navSections } from "@/components/layout/nav-items";
 import { DarkModeToggle } from "@/components/layout/dark-mode-toggle";
 
@@ -40,7 +41,7 @@ export function Sidebar({ user, streakDays, className }: SidebarProps) {
   return (
     <div className={cn("flex h-full w-full flex-col bg-card", className)}>
       <div className="flex h-16 shrink-0 items-center border-b border-border px-5">
-        <Link href="/" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3 rounded-2xl transition-opacity duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:opacity-80">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-2xl bg-primary shadow-sm">
             <Zap className="size-[15px] fill-primary-foreground text-primary-foreground" />
           </span>
@@ -70,8 +71,9 @@ export function Sidebar({ user, streakDays, className }: SidebarProps) {
                       href={item.href}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
-                        active && "bg-primary text-primary-foreground shadow-sm hover:bg-primary hover:text-primary-foreground"
+                        "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-[13px] font-medium text-muted-foreground",
+                        navItemBase,
+                        active && navItemActive
                       )}
                     >
                       <Icon className="size-[15px] shrink-0" />
@@ -104,7 +106,12 @@ export function Sidebar({ user, streakDays, className }: SidebarProps) {
         <DarkModeToggle />
         <Link
           href="/settings"
-          className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          aria-current={isNavItemActive(pathname ?? "", "/settings") ? "page" : undefined}
+          className={cn(
+            "flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-[13px] font-medium text-muted-foreground",
+            navItemBase,
+            isNavItemActive(pathname ?? "", "/settings") && navItemActive
+          )}
         >
           <Settings className="size-[15px] shrink-0" />
           <span>Settings</span>

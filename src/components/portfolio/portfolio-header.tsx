@@ -1,8 +1,14 @@
+"use client";
+
 import { ExternalLink, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-export function PortfolioHeader() {
+export interface PortfolioHeaderProps {
+  onAddProject: () => void;
+}
+
+export function PortfolioHeader({ onAddProject }: PortfolioHeaderProps) {
   return (
     <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
       <div>
@@ -19,7 +25,7 @@ export function PortfolioHeader() {
           <ExternalLink className="size-3.25" />
           alexchen.design
         </Button>
-        <Button className="rounded-2xl px-4 py-2 shadow-sm">
+        <Button className="rounded-2xl px-4 py-2 shadow-sm" onClick={onAddProject}>
           <Plus className="size-3.5" />
           Add Project
         </Button>

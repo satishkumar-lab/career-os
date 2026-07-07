@@ -1,12 +1,7 @@
 import { Award, BookOpen, Calendar, GraduationCap } from "lucide-react";
 
 import type { StatCardData } from "@/components/dashboard/types";
-import type { Certification } from "@/components/certifications/types";
-
-/**
- * Mock data standing in for the CareerOS API/Supabase queries for the
- * Certifications page. Shapes mirror the expected real endpoints.
- */
+import type { CertificationStatus } from "@/components/certifications/types";
 
 export const certificationStats: StatCardData[] = [
   {
@@ -47,7 +42,16 @@ export const certificationStats: StatCardData[] = [
   },
 ];
 
-export const certifications: Certification[] = [
+export interface CertificationSeed {
+  id: string;
+  name: string;
+  issuer: string;
+  status: CertificationStatus;
+  percent?: number;
+  dateLabel: string;
+}
+
+export const certifications: CertificationSeed[] = [
   {
     id: "aws-solutions-architect",
     name: "AWS Solutions Architect",
@@ -55,9 +59,6 @@ export const certifications: Certification[] = [
     status: "In Progress",
     percent: 81,
     dateLabel: "Exam: Jul 18, 2025",
-    color: "#10b981",
-    tint: "rgba(16,185,129,0.09)",
-    trackTint: "rgba(16,185,129,0.13)",
   },
   {
     id: "google-analytics-4",
@@ -66,9 +67,6 @@ export const certifications: Certification[] = [
     status: "Completed",
     percent: 100,
     dateLabel: "Jan 2025",
-    color: "#f59e0b",
-    tint: "rgba(245,158,11,0.09)",
-    trackTint: "rgba(245,158,11,0.13)",
   },
   {
     id: "hubspot-content-marketing",
@@ -77,9 +75,6 @@ export const certifications: Certification[] = [
     status: "Completed",
     percent: 100,
     dateLabel: "Oct 2024",
-    color: "#0ea5e9",
-    tint: "rgba(14,165,233,0.09)",
-    trackTint: "rgba(14,165,233,0.13)",
   },
   {
     id: "product-management-certificate",
@@ -87,8 +82,5 @@ export const certifications: Certification[] = [
     issuer: "Pragmatic Institute",
     status: "Planned",
     dateLabel: "Q4 2025",
-    color: "#8b5cf6",
-    tint: "rgba(139,92,246,0.09)",
-    trackTint: "rgba(139,92,246,0.13)",
   },
 ];

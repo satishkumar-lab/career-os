@@ -1,12 +1,7 @@
 import { Code2, Globe, Package, Zap } from "lucide-react";
 
 import type { StatCardData } from "@/components/dashboard/types";
-import type { Project } from "@/components/projects/types";
-
-/**
- * Mock data standing in for the CareerOS API/Supabase queries for the
- * Projects page. Shapes mirror the expected real endpoints.
- */
+import type { ProjectStatus } from "@/components/projects/types";
 
 export const projectStats: StatCardData[] = [
   {
@@ -47,7 +42,18 @@ export const projectStats: StatCardData[] = [
   },
 ];
 
-export const projects: Project[] = [
+export interface ProjectSeed {
+  id: string;
+  name: string;
+  startedLabel: string;
+  description: string;
+  status: ProjectStatus;
+  techStack: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+}
+
+export const projects: ProjectSeed[] = [
   {
     id: "fintech-dashboard",
     name: "Fintech Dashboard",
@@ -57,8 +63,6 @@ export const projects: Project[] = [
     techStack: ["React", "TypeScript", "Recharts"],
     githubUrl: "https://github.com",
     liveUrl: "https://example.com",
-    color: "#5b5bd6",
-    tint: "rgba(91,91,214,0.09)",
   },
   {
     id: "careeros",
@@ -69,8 +73,6 @@ export const projects: Project[] = [
     techStack: ["React", "Tailwind", "Supabase"],
     githubUrl: "https://github.com",
     liveUrl: "https://example.com",
-    color: "#10b981",
-    tint: "rgba(16,185,129,0.09)",
   },
   {
     id: "ai-study-assistant",
@@ -80,8 +82,6 @@ export const projects: Project[] = [
     status: "Building",
     techStack: ["Next.js", "OpenAI", "PostgreSQL"],
     githubUrl: "https://github.com",
-    color: "#8b5cf6",
-    tint: "rgba(139,92,246,0.09)",
   },
   {
     id: "portfolio-v3",
@@ -92,7 +92,5 @@ export const projects: Project[] = [
     techStack: ["Astro", "Tailwind"],
     githubUrl: "https://github.com",
     liveUrl: "https://example.com",
-    color: "#f59e0b",
-    tint: "rgba(245,158,11,0.09)",
   },
 ];

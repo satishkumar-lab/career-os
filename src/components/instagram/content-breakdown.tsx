@@ -1,3 +1,5 @@
+import { cardHover, contentCardRadius } from "@/lib/interaction-styles";
+import { cn } from "@/lib/utils";
 import type { ContentBreakdownItem } from "@/components/instagram/types";
 
 function ContentCard({ item }: { item: ContentBreakdownItem }) {
@@ -5,7 +7,11 @@ function ContentCard({ item }: { item: ContentBreakdownItem }) {
 
   return (
     <div
-      className="flex flex-col items-center rounded-2xl border border-[rgba(0,0,0,0.06)] p-5 shadow-[0px_1px_1.5px_rgba(0,0,0,0.04)]"
+      className={cn(
+        contentCardRadius,
+        "flex flex-col items-center border border-[rgba(0,0,0,0.06)] p-5 shadow-[0px_1px_1.5px_rgba(0,0,0,0.04)]",
+        cardHover
+      )}
       style={{ backgroundColor: item.cardBg }}
     >
       <span

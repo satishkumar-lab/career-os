@@ -1,4 +1,5 @@
 import { DashboardCard } from "@/components/dashboard/dashboard-card";
+import { AnimatedProgressFill } from "@/components/ui/animated-progress-fill";
 import type { SocialGrowthItem } from "@/components/dashboard/types";
 
 export interface SocialGrowthCardProps {
@@ -31,9 +32,9 @@ export function SocialGrowthCard({ items, className }: SocialGrowthCardProps) {
                 </div>
               </div>
               <div className="mt-1.5 h-[5px] w-full overflow-hidden rounded-full" style={{ backgroundColor: item.tint }}>
-                <div
-                  className="h-full rounded-full"
-                  style={{ width: `${item.percent}%`, backgroundColor: item.color }}
+                <AnimatedProgressFill
+                  value={item.percent}
+                  style={{ backgroundColor: item.color }}
                 />
               </div>
               <p className="mt-1 text-[10.5px] text-muted-foreground">{item.goalLabel}</p>
