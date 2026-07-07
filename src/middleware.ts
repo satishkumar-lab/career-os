@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import {
+  AUTH_CALLBACK_PATH,
   DASHBOARD_PATH,
   isPublicPath,
   LOGIN_PATH,
@@ -8,13 +9,19 @@ import {
 import { createMiddlewareClient } from "@/lib/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Let the auth callback route handler exchange the OAuth code without
+  // middleware session checks interfering with cookie writes.
+  if (pathname === AUTH_CALLBACK_PATH) {
+    return NextResponse.next();
+  }
+
   const { supabase, supabaseResponse } = createMiddlewareClient(request);
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const { pathname } = request.nextUrl;
 
   if (pathname === "/") {
     const url = request.nextUrl.clone();
