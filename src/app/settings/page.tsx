@@ -15,24 +15,21 @@ import {
   dashboardPreferences,
   integrations,
   notificationSettings,
-  profileSettings,
 } from "@/lib/mock/settings";
-
-const currentUser = { name: "Alex Chen", status: "Open to roles", initials: "AC" };
 
 export default function SettingsPage() {
   return (
-    <AppLayout user={currentUser} streakDays={streak.days} hasUnreadNotifications>
+    <AppLayout streakDays={streak.days} hasUnreadNotifications>
       <div className="flex flex-col gap-6">
         <SettingsHeader />
 
         <div className="flex flex-col gap-5">
-          <ProfileSection profile={profileSettings} />
+          <ProfileSection />
           <CareerPreferencesSection preferences={careerPreferences} />
           <AppearanceSection settings={appearanceSettings} />
           <NotificationsSection settings={notificationSettings} />
           <DashboardPreferencesSection settings={dashboardPreferences} />
-          <IntegrationsSection items={integrations} />
+          {false ? <IntegrationsSection items={integrations} /> : null}
           <DataBackupSection />
           <AccountSection />
         </div>

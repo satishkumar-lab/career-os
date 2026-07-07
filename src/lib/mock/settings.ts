@@ -2,18 +2,8 @@ import type {
   AppearanceSettings,
   CareerPreferences,
   IntegrationSetting,
-  ProfileSettings,
   ToggleSetting,
 } from "@/components/settings/types";
-
-export const profileSettings: ProfileSettings = {
-  name: "Alex Chen",
-  email: "alex.chen@email.com",
-  initials: "AC",
-  title: "Senior Product Manager",
-  location: "San Francisco, CA",
-  bio: "Building products at the intersection of AI and career growth.",
-};
 
 export const careerPreferences: CareerPreferences = {
   targetRole: "Senior Product Manager",

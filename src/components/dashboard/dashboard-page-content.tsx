@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 
 import { AppLayout } from "@/components/layout/app-layout";
-import type { SidebarUser } from "@/components/layout/sidebar";
 import { ActiveGoalsCard } from "@/components/dashboard/active-goals-card";
 import { AiFocusCard } from "@/components/dashboard/ai-focus-card";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
@@ -15,12 +14,9 @@ import { TodayTasksCard } from "@/components/dashboard/today-tasks-card";
 import { UpcomingCard } from "@/components/dashboard/upcoming-card";
 import { buildDashboardData } from "@/lib/dashboard/selectors";
 import { useDashboardState } from "@/lib/dashboard/use-dashboard-state";
+import { useProfile } from "@/lib/settings/profile-context";
 
-export interface DashboardPageContentProps {
-  user: SidebarUser;
-}
-
-export function DashboardPageContent({ user }: DashboardPageContentProps) {
+export function DashboardPageContent() {
   const [state] = useDashboardState();
 
   const dashboardData = useMemo(
@@ -30,24 +26,20 @@ export function DashboardPageContent({ user }: DashboardPageContentProps) {
 
   return (
     <AppLayout
-      user={user}
       streakDays={dashboardData?.streak.days}
       hasUnreadNotifications
     >
-      {dashboardData ? (
-        <DashboardCards user={user} dashboardData={dashboardData} />
-      ) : null}
+      {dashboardData ? <DashboardCards dashboardData={dashboardData} /> : null}
     </AppLayout>
   );
 }
 
 function DashboardCards({
-  user,
   dashboardData,
 }: {
-  user: SidebarUser;
   dashboardData: NonNullable<ReturnType<typeof buildDashboardData>>;
 }) {
+  const { profile } = useProfile();
   const {
     streak,
     stats,
@@ -62,7 +54,7 @@ function DashboardCards({
 
   return (
     <div className="flex flex-col gap-6">
-      <DashboardHeader name={user.name} streakDays={streak.days} streakNote={streak.note} />
+      <DashboardHeader name={profile.name} streakDays={streak.days} streakNote={streak.note} />
 
       <StatsRow stats={stats} />
 

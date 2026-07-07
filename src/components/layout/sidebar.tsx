@@ -8,11 +8,15 @@ import { cn } from "@/lib/utils";
 import { navItemActive, navItemBase } from "@/lib/interaction-styles";
 import { navSections } from "@/components/layout/nav-items";
 import { DarkModeToggle } from "@/components/layout/dark-mode-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useProfile } from "@/lib/settings/profile-context";
+import { deriveInitials } from "@/lib/settings/storage";
 
 export interface SidebarUser {
   name: string;
   status?: string;
   initials: string;
+  photoDataUrl?: string;
 }
 
 export interface SidebarProps {
@@ -31,7 +35,9 @@ function isNavItemActive(pathname: string, href: string) {
  * optional streak banner, and account/theme actions in the footer.
  * Shared by the desktop layout and the mobile navigation drawer.
  */
-export function Sidebar({ user, streakDays, className }: SidebarProps) {
+export function Sidebar({ user: _user, streakDays, className }: SidebarProps) {
+  const { user: profileUser } = useProfile();
+  const avatarInitials = deriveInitials(profileUser.name) || profileUser.initials || "?";
   // `usePathname()` is populated from the current request URL during SSR
   // and from the same URL on the client's first render, so the active nav
   // item is identical in both passes. `pathname` can briefly be `null`
@@ -118,13 +124,18 @@ export function Sidebar({ user, streakDays, className }: SidebarProps) {
         </Link>
 
         <div className="mt-1 flex items-center gap-3 rounded-2xl p-3">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-medium text-primary-foreground shadow-sm">
-            {user.initials}
-          </span>
+          <Avatar key={profileUser.photoDataUrl ?? "no-photo"} className="size-8 shrink-0 after:hidden">
+            {profileUser.photoDataUrl ? (
+              <AvatarImage src={profileUser.photoDataUrl} alt="" className="rounded-full" />
+            ) : null}
+            <AvatarFallback className="rounded-full bg-primary text-[11px] font-medium text-primary-foreground shadow-sm">
+              {avatarInitials}
+            </AvatarFallback>
+          </Avatar>
           <span className="flex min-w-0 flex-col">
-            <span className="truncate text-[13px] font-medium text-foreground">{user.name}</span>
-            {user.status && (
-              <span className="truncate text-[11px] font-medium text-muted-foreground">{user.status}</span>
+            <span className="truncate text-[13px] font-medium text-foreground">{profileUser.name}</span>
+            {profileUser.status && (
+              <span className="truncate text-[11px] font-medium text-muted-foreground">{profileUser.status}</span>
             )}
           </span>
         </div>

@@ -5,6 +5,7 @@ export interface ProfileSettings {
   title: string;
   location: string;
   bio: string;
+  photoDataUrl?: string;
 }
 
 export interface CareerPreferences {
