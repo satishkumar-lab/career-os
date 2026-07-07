@@ -8,6 +8,19 @@ const MISSING_ENV_MESSAGE =
   "Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your environment variables and redeploy.";
 
 /**
+ * Supabase Auth expects the project base URL (e.g. https://xxx.supabase.co).
+ * If the REST API URL is supplied (…/rest/v1), OAuth is routed to the wrong
+ * endpoint and the browser shows "No API key found in request".
+ */
+export function normalizeSupabaseUrl(url: string): string {
+  let normalized = url.trim().replace(/\/+$/, "");
+
+  normalized = normalized.replace(/\/rest\/v1\/?$/i, "");
+
+  return normalized.replace(/\/+$/, "");
+}
+
+/**
  * Dynamic env lookup — avoids Next.js build-time inlining so Vercel can
  * inject values at runtime in Edge Middleware and Server Functions.
  */
@@ -29,7 +42,7 @@ function resolveSupabaseEnv(
     throw new Error(MISSING_ENV_MESSAGE);
   }
 
-  return { url, anonKey };
+  return { url: normalizeSupabaseUrl(url), anonKey };
 }
 
 /** Server Components, Route Handlers, and Edge Middleware. */
