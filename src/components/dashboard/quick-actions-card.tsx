@@ -5,10 +5,11 @@ import type { QuickAction } from "@/components/dashboard/types";
 
 export interface QuickActionsCardProps {
   actions: QuickAction[];
+  onActionClick?: (actionId: string) => void;
   className?: string;
 }
 
-export function QuickActionsCard({ actions, className }: QuickActionsCardProps) {
+export function QuickActionsCard({ actions, onActionClick, className }: QuickActionsCardProps) {
   return (
     <DashboardCard title="Quick Actions" className={className}>
       <div className="grid grid-cols-2 gap-2.5">
@@ -19,6 +20,7 @@ export function QuickActionsCard({ actions, className }: QuickActionsCardProps) 
             <button
               key={action.id}
               type="button"
+              onClick={() => onActionClick?.(action.id)}
               className={cn(
                 contentCardRadius,
                 "flex items-center gap-2.5 border border-border p-3 text-left",

@@ -1,5 +1,6 @@
 import { getAiToolsState, type AiToolsPersistedState } from "@/lib/ai-tools/storage";
 import { getCertificationsState, type CertificationsPersistedState } from "@/lib/certifications/storage";
+import { getDashboardTasksState, type DashboardTasksPersistedState } from "@/lib/dashboard/tasks-storage";
 import { getGoalsState, type GoalsPersistedState } from "@/lib/goals/storage";
 import { getInstagramState, type InstagramPersistedState } from "@/lib/instagram/storage";
 import { getJobTrackerState, type JobTrackerPersistedState } from "@/lib/job-tracker/storage";
@@ -18,6 +19,7 @@ export interface DashboardModuleStates {
   linkedIn: LinkedInPersistedState;
   instagram: InstagramPersistedState;
   goals: GoalsPersistedState;
+  dashboardTasks: DashboardTasksPersistedState;
 }
 
 export function loadDashboardModuleStates(): DashboardModuleStates {
@@ -31,5 +33,6 @@ export function loadDashboardModuleStates(): DashboardModuleStates {
     linkedIn: getLinkedInState(),
     instagram: getInstagramState(),
     goals: getGoalsState(),
+    dashboardTasks: getDashboardTasksState(),
   };
 }

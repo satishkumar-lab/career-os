@@ -17,6 +17,14 @@ export interface TaskItem {
   id: string;
   label: string;
   done: boolean;
+  description?: string;
+  priority?: "Low" | "Medium" | "High";
+  dueDate?: string;
+}
+
+export interface AiRecommendation {
+  id: string;
+  label: string;
 }
 
 export interface GoalItem {

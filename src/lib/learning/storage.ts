@@ -183,6 +183,36 @@ export function updateLearningNotes(
   return saveLearningState(nextState);
 }
 
+function formatHoursLabel(total: number): string {
+  return Number.isInteger(total) ? `${total}h` : `${total.toFixed(1)}h`;
+}
+
+export function logLearningHours(
+  state: LearningPersistedState,
+  hours: number
+): LearningPersistedState {
+  if (hours <= 0) {
+    return state;
+  }
+
+  const dayIndex = (new Date().getDay() + 6) % 7;
+  const weeklyHours = state.weeklyHours.map((point, index) =>
+    index === dayIndex ? { ...point, hours: point.hours + hours } : point
+  );
+  const total = weeklyHours.reduce((sum, point) => sum + point.hours, 0);
+  const formattedTotal = formatHoursLabel(total);
+
+  const nextState = {
+    ...state,
+    weeklyHours,
+    weeklyHoursTotal: `${formattedTotal} this week`,
+    hoursThisWeek: formattedTotal,
+    hoursTrend: "Logged today",
+  };
+
+  return saveLearningState(nextState);
+}
+
 export function buildLearningStats(state: LearningPersistedState): StatCardData[] {
   const activeCount = state.courses.filter((course) => course.status === "active").length;
   const completedCount = state.courses.filter((course) => course.status === "completed").length;

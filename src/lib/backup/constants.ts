@@ -1,5 +1,6 @@
 import { AI_TOOLS_STORAGE_KEY } from "@/lib/ai-tools/constants";
 import { CERTIFICATIONS_STORAGE_KEY } from "@/lib/certifications/constants";
+import { DASHBOARD_TASKS_STORAGE_KEY } from "@/lib/dashboard/constants";
 import { GOALS_STORAGE_KEY } from "@/lib/goals/constants";
 import { INSTAGRAM_STORAGE_KEY } from "@/lib/instagram/constants";
 import { JOB_TRACKER_STORAGE_KEY } from "@/lib/job-tracker/constants";
@@ -17,6 +18,7 @@ export const CAREER_OS_KEY_PREFIXES = ["career-os-", "careeros-"] as const;
 
 export const CAREER_OS_MODULE_KEYS = [
   LEARNING_STORAGE_KEY,
+  DASHBOARD_TASKS_STORAGE_KEY,
   AI_TOOLS_STORAGE_KEY,
   CERTIFICATIONS_STORAGE_KEY,
   PROJECTS_STORAGE_KEY,

@@ -5,8 +5,7 @@ import {
   Calendar,
   Camera,
   Clock,
-  Flag,
-  Flame,
+  Code2,
   ListChecks,
   Share2,
   Sparkles,
@@ -15,6 +14,7 @@ import {
 
 import type {
   ActivityItem,
+  AiRecommendation,
   GoalItem,
   QuickAction,
   SocialGrowthItem,
@@ -23,12 +23,15 @@ import type {
   UpcomingEvent,
 } from "@/components/dashboard/types";
 import { compareDashboardDates, getRelativeDateLabel, parseDashboardDate } from "@/lib/dashboard/date-utils";
+import { toTaskItems } from "@/lib/dashboard/tasks-storage";
 import { isGoalOnTrack } from "@/lib/goals/constants";
 import { toGoals } from "@/lib/goals/storage";
 import { buildFollowerGrowthSummary as buildInstagramFollowerSummary } from "@/lib/instagram/storage";
+import { buildAiToolsStats } from "@/lib/ai-tools/storage";
 import { buildJobTrackerStats } from "@/lib/job-tracker/storage";
 import { buildLearningStats } from "@/lib/learning/storage";
 import { buildFollowerGrowthSummary as buildLinkedInFollowerSummary } from "@/lib/linkedin/storage";
+import { buildProjectStats } from "@/lib/projects/storage";
 import type { DashboardModuleStates } from "@/lib/dashboard/state";
 
 export interface DashboardStreak {
@@ -94,69 +97,70 @@ export function buildDashboardStreak(states: DashboardModuleStates): DashboardSt
 
 export function buildDashboardStats(states: DashboardModuleStates): StatCardData[] {
   const learningStats = buildLearningStats(states.learning);
+  const aiToolsStats = buildAiToolsStats(states.aiTools);
   const jobStats = buildJobTrackerStats(states.jobTracker);
-
-  const visibleGoals = states.goals.goals.filter((goal) => !goal.archived);
-  const activeGoals = visibleGoals.filter((goal) => isActiveGoal(goal.status));
-  const onTrackGoals = activeGoals.filter((goal) => isGoalOnTrack(goal.status, goal.progress));
-  const completedGoals = visibleGoals.filter((goal) => goal.status === "Completed").length;
+  const projectStats = buildProjectStats(states.projects);
 
   const hoursStat = findStat(learningStats, "hours-this-week");
-  const streakStat = findStat(learningStats, "daily-streak");
+  const activeCoursesStat = findStat(learningStats, "active-courses");
+  const toolsStat = findStat(aiToolsStats, "tools-tracked");
+  const expertStat = findStat(aiToolsStats, "expert-level");
   const activeAppsStat = findStat(jobStats, "active");
   const interviewsStat = findStat(jobStats, "interviews");
-  const responseRateStat = findStat(jobStats, "response-rate");
+  const totalProjectsStat = findStat(projectStats, "total-projects");
+  const liveProjectsStat = findStat(projectStats, "live");
   const interviewCount = interviewsStat ? Number(interviewsStat.value) : 0;
+  const liveCount = liveProjectsStat ? Number(liveProjectsStat.value) : 0;
 
   return [
     {
-      id: "goals-active",
-      label: "Goals Active",
-      value: String(activeGoals.length),
-      sublabel:
-        activeGoals.length > 0 ? `${onTrackGoals.length} on track` : "No active goals yet",
-      trend:
-        completedGoals > 0
-          ? `${completedGoals} completed`
-          : "Add your first goal",
-      icon: Flag,
-      color: "#17a5fb",
-      tint: "rgba(23,165,251,0.09)",
-    },
-    {
-      id: "learning-hrs",
-      label: "Learning Hrs",
+      id: "learning",
+      label: "Learning",
       value: hoursStat?.value ?? "0h",
       sublabel: "this week",
-      trend: hoursStat?.trend ?? "Log learning time",
+      trend:
+        activeCoursesStat && Number(activeCoursesStat.value) > 0
+          ? `${activeCoursesStat.value} active courses`
+          : "Log learning time",
       icon: BookOpen,
       color: "#e80584",
       tint: "rgba(232,5,132,0.09)",
     },
     {
-      id: "streak",
-      label: "Streak",
-      value: streakStat?.value ?? "0d",
-      sublabel: "personal best",
-      trend: streakStat?.trend ?? "Start a streak",
-      icon: Flame,
-      color: "#f59e0b",
-      tint: "rgba(245,158,11,0.09)",
+      id: "ai-tools",
+      label: "AI Tools",
+      value: toolsStat?.value ?? "0",
+      sublabel: "tracked",
+      trend:
+        expertStat && Number(expertStat.value) > 0
+          ? `${expertStat.value} at expert level`
+          : "Add AI tools",
+      icon: Sparkles,
+      color: "#5b5bd6",
+      tint: "rgba(91,91,214,0.09)",
     },
     {
-      id: "applications",
-      label: "Applications",
+      id: "job-applications",
+      label: "Job Applications",
       value: activeAppsStat?.value ?? "0",
       sublabel: "active",
       trend:
         interviewCount > 0
-          ? buildTrendLabel(interviewCount, "interview", "interviews", "No interviews yet")
-          : responseRateStat?.value
-            ? `${responseRateStat.value} response rate`
-            : "Track applications",
+          ? buildTrendLabel(interviewCount, "interview", "interviews", "Track applications")
+          : "Track applications",
       icon: Briefcase,
       color: "#10b981",
       tint: "rgba(16,185,129,0.09)",
+    },
+    {
+      id: "projects",
+      label: "Projects",
+      value: totalProjectsStat?.value ?? "0",
+      sublabel: "total",
+      trend: liveCount > 0 ? `${liveCount} live` : "Add a project",
+      icon: Code2,
+      color: "#17a5fb",
+      tint: "rgba(23,165,251,0.09)",
     },
   ];
 }
@@ -287,25 +291,24 @@ function buildFocusCandidates(states: DashboardModuleStates): FocusCandidate[] {
 }
 
 export function buildDashboardTasks(states: DashboardModuleStates): TaskItem[] {
-  const candidates = buildFocusCandidates(states)
+  return toTaskItems(states.dashboardTasks.tasks);
+}
+
+export function buildDashboardAiRecommendations(states: DashboardModuleStates): AiRecommendation[] {
+  const { tasks, ignoredSuggestionIds } = states.dashboardTasks;
+  const addedSuggestionIds = new Set(
+    tasks.map((task) => task.sourceSuggestionId).filter((id): id is string => Boolean(id))
+  );
+  const ignoredIds = new Set(ignoredSuggestionIds);
+
+  return buildFocusCandidates(states)
+    .filter((candidate) => !addedSuggestionIds.has(candidate.id) && !ignoredIds.has(candidate.id))
     .sort((left, right) => compareDashboardDates(left.sortDate, right.sortDate))
-    .slice(0, 5);
-
-  if (candidates.length === 0) {
-    return [
-      {
-        id: "empty-task",
-        label: "No focus tasks yet — add activity across your modules",
-        done: false,
-      },
-    ];
-  }
-
-  return candidates.map((candidate) => ({
-    id: candidate.id,
-    label: candidate.label,
-    done: false,
-  }));
+    .slice(0, 3)
+    .map((candidate) => ({
+      id: candidate.id,
+      label: candidate.label,
+    }));
 }
 
 export function buildDashboardUpcoming(states: DashboardModuleStates): UpcomingEvent[] {
@@ -764,6 +767,7 @@ export function buildDashboardData(states: DashboardModuleStates) {
     streak: buildDashboardStreak(states),
     stats: buildDashboardStats(states),
     tasks: buildDashboardTasks(states),
+    aiRecommendations: buildDashboardAiRecommendations(states),
     goals: buildDashboardGoals(states),
     upcomingEvents: buildDashboardUpcoming(states),
     quickActions: buildDashboardQuickActions(),
