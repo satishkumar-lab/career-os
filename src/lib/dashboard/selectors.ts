@@ -4,9 +4,10 @@ import {
   BookOpen,
   Calendar,
   Camera,
-  Clock,
   Code2,
   ListChecks,
+  LogIn,
+  LogOut,
   Share2,
   Sparkles,
   Target,
@@ -29,7 +30,7 @@ import { toGoals } from "@/lib/goals/storage";
 import { buildFollowerGrowthSummary as buildInstagramFollowerSummary } from "@/lib/instagram/storage";
 import { buildAiToolsStats } from "@/lib/ai-tools/storage";
 import { buildJobTrackerStats } from "@/lib/job-tracker/storage";
-import { buildLearningStats } from "@/lib/learning/storage";
+import { buildLearningStats, isLearningCheckedIn } from "@/lib/learning/storage";
 import { buildFollowerGrowthSummary as buildLinkedInFollowerSummary } from "@/lib/linkedin/storage";
 import { buildProjectStats } from "@/lib/projects/storage";
 import type { DashboardModuleStates } from "@/lib/dashboard/state";
@@ -121,7 +122,7 @@ export function buildDashboardStats(states: DashboardModuleStates): StatCardData
       trend:
         activeCoursesStat && Number(activeCoursesStat.value) > 0
           ? `${activeCoursesStat.value} active courses`
-          : "Log learning time",
+          : "Check in to start",
       icon: BookOpen,
       color: "#e80584",
       tint: "rgba(232,5,132,0.09)",
@@ -406,14 +407,16 @@ export function buildDashboardUpcoming(states: DashboardModuleStates): UpcomingE
     .map(stripSortDate);
 }
 
-export function buildDashboardQuickActions(): QuickAction[] {
+export function buildDashboardQuickActions(states: DashboardModuleStates): QuickAction[] {
+  const checkedIn = isLearningCheckedIn(states.learning);
+
   return [
     {
-      id: "log-hours",
-      label: "Log Hours",
-      icon: Clock,
-      color: "#5b5bd6",
-      tint: "rgba(91,91,214,0.09)",
+      id: "learning-session",
+      label: checkedIn ? "Check Out" : "Check In",
+      icon: checkedIn ? LogOut : LogIn,
+      color: checkedIn ? "#10b981" : "#5b5bd6",
+      tint: checkedIn ? "rgba(16,185,129,0.09)" : "rgba(91,91,214,0.09)",
     },
     {
       id: "add-task",
@@ -770,7 +773,7 @@ export function buildDashboardData(states: DashboardModuleStates) {
     aiRecommendations: buildDashboardAiRecommendations(states),
     goals: buildDashboardGoals(states),
     upcomingEvents: buildDashboardUpcoming(states),
-    quickActions: buildDashboardQuickActions(),
+    quickActions: buildDashboardQuickActions(states),
     recentActivity: buildDashboardActivity(states),
     socialGrowth: buildDashboardSocialGrowth(states),
     aiFocus: buildDashboardAiFocus(states),

@@ -8,7 +8,6 @@ import { AppLayout } from "@/components/layout/app-layout";
 import { ActiveGoalsCard } from "@/components/dashboard/active-goals-card";
 import { AiFocusCard } from "@/components/dashboard/ai-focus-card";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
-import { LogHoursModal } from "@/components/dashboard/log-hours-modal";
 import { QuickActionsCard } from "@/components/dashboard/quick-actions-card";
 import { RecentActivityCard } from "@/components/dashboard/recent-activity-card";
 import { SocialGrowthCard } from "@/components/dashboard/social-growth-card";
@@ -29,7 +28,7 @@ import {
 import { useDashboardState } from "@/lib/dashboard/use-dashboard-state";
 import { addGoal, type GoalInput } from "@/lib/goals/storage";
 import { addJobApplication, type JobApplicationInput } from "@/lib/job-tracker/storage";
-import { logLearningHours } from "@/lib/learning/storage";
+import { checkInLearning, checkOutLearning } from "@/lib/learning/storage";
 import { useProfile } from "@/lib/settings/profile-context";
 
 export function DashboardPageContent() {
@@ -71,7 +70,6 @@ function DashboardCards({
   const { showToast } = useToast();
 
   const [taskModalOpen, setTaskModalOpen] = useState(false);
-  const [logHoursModalOpen, setLogHoursModalOpen] = useState(false);
   const [goalModalOpen, setGoalModalOpen] = useState(false);
   const [applicationModalOpen, setApplicationModalOpen] = useState(false);
 
@@ -120,11 +118,29 @@ function DashboardCards({
     onRefresh();
   };
 
-  const handleLogHours = (hours: number) => {
+  const handleLearningSession = () => {
     const current = loadDashboardModuleStates();
-    logLearningHours(current.learning, hours);
+    const isCheckedIn = Boolean(current.learning.activeSession?.checkedInAt);
+
+    if (isCheckedIn) {
+      const result = checkOutLearning(current.learning);
+
+      if (result.tooShort) {
+        onRefresh();
+        showToast("Session too short. Learn for at least 1 minute.");
+        return;
+      }
+
+      onRefresh();
+      showToast(
+        `Checked out — ${result.hoursLogged}h logged. Streak: ${result.streakDays} day${result.streakDays === 1 ? "" : "s"}.`
+      );
+      return;
+    }
+
+    checkInLearning(current.learning);
     onRefresh();
-    showToast("Learning hours logged.");
+    showToast("Checked in. Happy learning!");
   };
 
   const handleSaveGoal = (input: GoalInput) => {
@@ -143,8 +159,8 @@ function DashboardCards({
 
   const handleQuickAction = (actionId: string) => {
     switch (actionId) {
-      case "log-hours":
-        setLogHoursModalOpen(true);
+      case "learning-session":
+        handleLearningSession();
         break;
       case "add-task":
         setTaskModalOpen(true);
@@ -194,11 +210,6 @@ function DashboardCards({
         open={taskModalOpen}
         onOpenChange={setTaskModalOpen}
         onSave={handleSaveTask}
-      />
-      <LogHoursModal
-        open={logHoursModalOpen}
-        onOpenChange={setLogHoursModalOpen}
-        onSave={handleLogHours}
       />
       <GoalFormModal
         open={goalModalOpen}
