@@ -15,7 +15,7 @@ import {
   LOGIN_CARD_SUBTITLE,
   LOGIN_CARD_TITLE,
 } from "@/lib/auth/branding";
-import { AUTH_CALLBACK_PATH, DASHBOARD_PATH } from "@/lib/auth/routes";
+import { getAuthCallbackUrl } from "@/lib/auth/app-origin";
 import { cardShell } from "@/lib/interaction-styles";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/shared/toast-provider";
@@ -39,7 +39,7 @@ export function LoginCard({ authError }: LoginCardProps) {
     setIsLoading(true);
 
     const supabase = createClient();
-    const redirectTo = `${window.location.origin}${AUTH_CALLBACK_PATH}?next=${encodeURIComponent(DASHBOARD_PATH)}`;
+    const redirectTo = getAuthCallbackUrl();
 
     const { error: signInError } = await supabase.auth.signInWithOAuth({
       provider: "google",

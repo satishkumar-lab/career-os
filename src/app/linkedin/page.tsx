@@ -1,10 +1,10 @@
 import { AppLayout } from "@/components/layout/app-layout";
-import { LinkedInPageContent } from "@/components/linkedin/linkedin-page-content";
+import { AiLinkedInAgentPageContent } from "@/components/linkedin-agent/ai-linkedin-agent-page-content";
 
 export default function LinkedInPage() {
   return (
     <AppLayout hasUnreadNotifications>
-      <LinkedInPageContent />
+      <AiLinkedInAgentPageContent />
     </AppLayout>
   );
 }

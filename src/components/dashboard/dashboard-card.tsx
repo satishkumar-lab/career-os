@@ -8,6 +8,8 @@ export interface DashboardCardProps {
   title: string;
   action?: ReactNode;
   className?: string;
+  /** When false, the outer card shell does not lift on hover — use for dense interactive interiors. */
+  elevateOnHover?: boolean;
   children: ReactNode;
 }
 
@@ -15,10 +17,23 @@ export interface DashboardCardProps {
  * Shared white card shell used by every dashboard section: a title row
  * with an optional trailing action, and a content slot below.
  */
-export function DashboardCard({ title, action, className, children }: DashboardCardProps) {
+export function DashboardCard({
+  title,
+  action,
+  className,
+  elevateOnHover = true,
+  children,
+}: DashboardCardProps) {
   return (
-    <div className={cn(contentCardRadius, "border border-border bg-card p-5 shadow-xs", cardHover, className)}>
-      <div className="flex items-center justify-between">
+    <div
+      className={cn(
+        contentCardRadius,
+        "border border-border bg-card p-5 shadow-xs",
+        elevateOnHover && cardHover,
+        className
+      )}
+    >
+      <div className="flex items-center justify-between gap-3">
         <h2 className="text-[14.5px] font-medium tracking-tight text-foreground">{title}</h2>
         {action}
       </div>
