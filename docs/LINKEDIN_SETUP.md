@@ -168,7 +168,7 @@ Add the same environment variables in Vercel → **Project → Settings → Envi
 | `SUPABASE_SERVICE_ROLE_KEY` | Production, Preview |
 | `LINKEDIN_CLIENT_ID` | Production, Preview |
 | `LINKEDIN_CLIENT_SECRET` | Production, Preview |
-| `NEXT_PUBLIC_APP_URL` | Production → `https://your-domain.com` |
+| `NEXT_PUBLIC_APP_URL` | Production → `https://your-domain.com` (must match LinkedIn redirect URL host) |
 
 Add your production LinkedIn redirect URL in the LinkedIn Developer Portal before going live.
 

@@ -26,14 +26,14 @@ export interface LinkedInOnboardingWizardProps {
     form: LinkedInAgentOnboardingForm,
     options?: { skipped?: boolean; completed?: boolean }
   ) => Promise<void>;
-  onConnectPlaceholder: () => void;
+  connectReturnTo?: string;
   isSaving?: boolean;
 }
 
 export function LinkedInOnboardingWizard({
   initialProfile,
   onSaveProgress,
-  onConnectPlaceholder,
+  connectReturnTo = "/linkedin",
   isSaving = false,
 }: LinkedInOnboardingWizardProps) {
   const [step, setStep] = useState(0);
@@ -106,7 +106,7 @@ export function LinkedInOnboardingWizard({
       case 6:
         return <OnboardingStepNiche {...stepProps} />;
       case 7:
-        return <OnboardingConnectStep onConnectPlaceholder={onConnectPlaceholder} />;
+        return <OnboardingConnectStep returnTo={connectReturnTo} />;
       default:
         return null;
     }

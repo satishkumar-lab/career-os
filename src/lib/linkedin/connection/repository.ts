@@ -27,6 +27,33 @@ function normalizeConnection(row: Record<string, unknown>): LinkedInConnectionRe
   };
 }
 
+export function isPostgresUniqueViolation(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code: string }).code === "23505"
+  );
+}
+
+export async function getLinkedInConnectionByMemberId(
+  memberId: string
+): Promise<LinkedInConnectionRecord | null> {
+  const supabase = createAdminClient();
+
+  const { data, error } = await supabase
+    .from(LINKEDIN_CONNECTIONS_TABLE)
+    .select("*")
+    .eq("linkedin_member_id", memberId)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return data ? normalizeConnection(data) : null;
+}
+
 export async function getLinkedInConnectionByUserId(
   userId: string
 ): Promise<LinkedInConnectionRecord | null> {
@@ -77,6 +104,19 @@ export async function saveLinkedInConnection(input: SaveLinkedInConnectionInput)
   const supabase = createAdminClient();
   const now = new Date().toISOString();
 
+  const [existingForUser, existingForMember] = await Promise.all([
+    getLinkedInConnectionByUserId(input.userId),
+    getLinkedInConnectionByMemberId(input.memberId),
+  ]);
+
+  if (existingForMember && existingForMember.user_id !== input.userId) {
+    throw Object.assign(new Error("This LinkedIn account is already connected to another CareerOS user."), {
+      code: "23505",
+    });
+  }
+
+  const connectedAt = existingForUser?.connected_at ?? now;
+
   const { error: connectionError } = await supabase.from(LINKEDIN_CONNECTIONS_TABLE).upsert(
     {
       user_id: input.userId,
@@ -84,7 +124,7 @@ export async function saveLinkedInConnection(input: SaveLinkedInConnectionInput)
       display_name: input.displayName,
       email: input.email,
       profile_picture_url: input.profilePictureUrl,
-      connected_at: now,
+      connected_at: connectedAt,
       last_synced_at: now,
       token_expires_at: input.tokenExpiresAt,
       status: "connected",

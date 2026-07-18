@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+import { AlertCircle } from "lucide-react";
 
 import { ActionCenter } from "@/components/linkedin-agent/mission-control/action-center";
 import { CoachPanel } from "@/components/linkedin-agent/mission-control/coach-panel";
@@ -26,6 +28,8 @@ import type {
   TrendingTopic,
 } from "@/lib/linkedin-agent/mission-control/types";
 import { useProfile } from "@/lib/settings/profile-context";
+import { cardShell, contentCardRadius } from "@/lib/interaction-styles";
+import { cn } from "@/lib/utils";
 
 function createId(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
@@ -33,6 +37,7 @@ function createId(prefix: string) {
 
 export function LinkedInMissionControl() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { showToast } = useToast();
   const { user } = useProfile();
@@ -74,8 +79,8 @@ export function LinkedInMissionControl() {
       showToast(reason || "LinkedIn connection failed.", { variant: "error" });
     }
 
-    router.replace("/linkedin", { scroll: false });
-  }, [linkedIn, router, searchParams, showToast]);
+    router.replace(pathname, { scroll: false });
+  }, [linkedIn, pathname, router, searchParams, showToast]);
 
   const runAction = useCallback(
     (actionId: string, label?: string) => {
@@ -163,6 +168,26 @@ export function LinkedInMissionControl() {
         onForceLoadingChange={setForceLoading}
         onReset={handleReset}
       />
+
+      {linkedIn.error ? (
+        <div
+          className={cn(
+            cardShell,
+            contentCardRadius,
+            "flex items-start gap-3 border-amber-200/80 bg-amber-50/70 p-4 dark:border-amber-900/50 dark:bg-amber-950/20"
+          )}
+        >
+          <AlertCircle className="mt-0.5 size-4 shrink-0 text-amber-700 dark:text-amber-400" />
+          <div className="min-w-0">
+            <p className="text-[13px] font-medium text-amber-900 dark:text-amber-100">
+              Unable to load LinkedIn connection status
+            </p>
+            <p className="mt-1 text-[12px] leading-relaxed text-amber-800/90 dark:text-amber-200/80">
+              {linkedIn.error}
+            </p>
+          </div>
+        </div>
+      ) : null}
 
       <MissionControlHeader
         connectionStatus={linkedIn.status}

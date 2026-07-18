@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { requireAuthenticatedUser } from "@/lib/auth/require-user";
 import { buildLinkedInAuthorizationUrl } from "@/lib/linkedin/oauth/client";
 import { isLinkedInOAuthConfigured } from "@/lib/linkedin/oauth/config";
-import { getAppOriginFromRequest } from "@/lib/linkedin/oauth/request-origin";
+import { getLinkedInOAuthOriginFromRequest } from "@/lib/linkedin/oauth/request-origin";
 import {
   createLinkedInOAuthState,
   linkedInOAuthStateCookieOptions,
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     return auth.response;
   }
 
-  const origin = getAppOriginFromRequest(request);
+  const origin = getLinkedInOAuthOriginFromRequest(request);
   const returnTo = new URL(request.url).searchParams.get("returnTo") || "/linkedin";
   const { state, cookieValue } = createLinkedInOAuthState(auth.user.id, returnTo);
   const authorizationUrl = buildLinkedInAuthorizationUrl(origin, state);

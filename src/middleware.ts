@@ -11,9 +11,9 @@ import { createMiddlewareClient } from "@/lib/supabase/middleware";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Let the auth callback route handler exchange the OAuth code without
-  // middleware session checks interfering with cookie writes.
-  if (pathname === AUTH_CALLBACK_PATH) {
+  // Let OAuth callback route handlers exchange codes and surface auth errors
+  // without middleware redirects stripping query parameters.
+  if (pathname === AUTH_CALLBACK_PATH || pathname === "/api/linkedin/callback") {
     return NextResponse.next();
   }
 

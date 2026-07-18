@@ -180,7 +180,8 @@ export function LinkedInConnectionPanel({
             ) : null}
 
             <p className="mt-2 text-[11.5px] text-muted-foreground">
-              Last synced · {formatTimestamp(profile?.lastSyncedAt)}
+              Connected · {formatTimestamp(profile?.connectedAt)}
+              {profile?.lastSyncedAt ? ` · Last synced · ${formatTimestamp(profile.lastSyncedAt)}` : null}
             </p>
           </div>
         </div>
