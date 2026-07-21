@@ -10,7 +10,6 @@ import { CoachPanel } from "@/components/linkedin-agent/mission-control/coach-pa
 import { ContentHub } from "@/components/linkedin-agent/mission-control/content-hub";
 import { MissionBriefHero } from "@/components/linkedin-agent/mission-control/mission-brief-hero";
 import { MissionControlHeader } from "@/components/linkedin-agent/mission-control/mission-control-header";
-import { MissionDevControls } from "@/components/linkedin-agent/mission-control/mission-dev-controls";
 import { MissionOutputSheet } from "@/components/linkedin-agent/mission-control/mission-output-sheet";
 import { NetworkingHub } from "@/components/linkedin-agent/mission-control/networking-hub";
 import { OpportunitiesSection } from "@/components/linkedin-agent/mission-control/opportunities-section";
@@ -43,9 +42,6 @@ export function LinkedInMissionControl() {
   const { user } = useProfile();
   const linkedIn = useLinkedInConnection();
 
-  const [forceEmpty, setForceEmpty] = useState(false);
-  const [forceLoading, setForceLoading] = useState(false);
-
   const [coachOpen, setCoachOpen] = useState(false);
   const [coachMessages, setCoachMessages] = useState<CoachMessage[]>([]);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
@@ -60,10 +56,9 @@ export function LinkedInMissionControl() {
   const data = useMemo(
     () =>
       buildMissionControlData({
-        forceEmpty,
         userNameOverride: user.name || undefined,
       }),
-    [forceEmpty, user.name]
+    [user.name]
   );
 
   useEffect(() => {
@@ -76,7 +71,12 @@ export function LinkedInMissionControl() {
       showToast("LinkedIn connected successfully.");
       void linkedIn.refresh();
     } else if (linkedinParam === "error") {
-      showToast(reason || "LinkedIn connection failed.", { variant: "error" });
+      const decodedReason = reason ? decodeURIComponent(reason) : null;
+      console.error("[LinkedIn OAuth][oauth_callback] UI error toast", {
+        reason: decodedReason,
+        rawReason: reason,
+      });
+      showToast(decodedReason || "LinkedIn connection failed.", { variant: "error" });
     }
 
     router.replace(pathname, { scroll: false });
@@ -150,25 +150,8 @@ export function LinkedInMissionControl() {
     [data]
   );
 
-  const handleReset = useCallback(() => {
-    setForceEmpty(false);
-    setForceLoading(false);
-    setCoachMessages([]);
-    setOutputOpen(false);
-    setCoachOpen(false);
-    showToast("Prototype session reset.");
-  }, [showToast]);
-
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6 pb-12">
-      <MissionDevControls
-        forceEmpty={forceEmpty}
-        forceLoading={forceLoading}
-        onForceEmptyChange={setForceEmpty}
-        onForceLoadingChange={setForceLoading}
-        onReset={handleReset}
-      />
-
       {linkedIn.error ? (
         <div
           className={cn(
@@ -205,7 +188,7 @@ export function LinkedInMissionControl() {
         firstName={data.firstName}
         brief={data.brief}
         onRecommendedAction={runAction}
-        isLoading={forceLoading}
+        isLoading={false}
       />
 
       <ActionCenter
